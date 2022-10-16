@@ -1,0 +1,20 @@
+#mainContent {
+  /* background-color: black; */
+  padding: 0px;
+  width: 100%;
+
+  margin-right: 0px;
+  padding-right: 0px;
+
+  margin-left: 50px;
+  padding-left: 0px;
+
+}
+
+@media (max-width: 767.98px) {
+  #mainContent {
+    /* background-color: red; */
+    padding: 0px;
+    margin: 0px;
+  }
+}
