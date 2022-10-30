@@ -5,9 +5,13 @@ return [
   [
     'GET' => [
       /*  mainController */
-      '' => 'controllers\main@home',
-
+      '' =>
+      'controllers\main@displayHome',
+      'login' => 'controllers\main@displayLogin',
+      'dashboard' => 'controllers\main@displayDashboard',
     ],
-    'POST' => []
+    'POST' => [
+      'api/login' => 'controllers\api@login',
+    ]
   ],
 ];

@@ -50,8 +50,7 @@ $appParams = getKeyInArray($data, 'appParams', []);
     <link href="/css/fontawesome/css/all.css" rel="stylesheet">
 
 
-    <script type="text/javascript">
-    </script>
+    <script type="text/javascript"></script>
 
     <!-- Style for carosel -->
     <link href="/css/custom/carousel.css" rel="stylesheet">
@@ -61,19 +60,31 @@ $appParams = getKeyInArray($data, 'appParams', []);
 
 </head>
 
-<body>
+<body class="m-0 p-0">
+
+    <div class="d-flex align-items-stretch flex-column bg-warning">
+
+        <header>
+
+            <?php include $this->navbar ?>
+
+        </header>
+
+        <div class="d-flex flex-row align-items-stretch">
+            <div>
+                <?php include $this->sidebar ?>
+            </div>
+
+            <div>
+                <main>
+                    <?= $this->content ?>
+                </main>
+            </div>
+        </div>
+
+    </div>
 
 
-    <header>
-
-    </header>
-    <main>
-
-        <?= $this->content ?>
-
-
-
-    </main>
 
     <script src="/js/bootstrap/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/2f74d37b46.js" crossorigin="anonymous"></script>
