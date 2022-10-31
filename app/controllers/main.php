@@ -26,16 +26,7 @@ class main
     include __DIR__ . '/../../layout/login.tpl.php';
   }
 
-  public function displayDashboard()
-  {
-    $data = $this->data;
 
-    // Carica il contenuto della pagina
-    $this->content = view('user/dashboard', compact('data'));
-
-    // carica il layout della pagina
-    include __DIR__ . '/../../layout/empty.tpl.php';
-  }
 
   public function displayHome()
   {
@@ -45,7 +36,69 @@ class main
     $this->createSidebar($data);
 
     // Carica il contenuto della pagina
-    $this->content = view('user/home', compact('data'));
+    $this->content = view('user/dashboard', compact('data'));
+
+    // carica il layout della pagina
+    include
+      __DIR__ . '/../../layout/empty.tpl.php';
+  }
+
+  // 
+  public function displayWallet()
+  {
+    $data = $this->data;
+
+    $this->createNavbar($data);
+    $this->createSidebar($data);
+
+    // Carica il contenuto della pagina
+    $this->content = view('user/wallet', compact('data'));
+
+    // carica il layout della pagina
+    include
+      __DIR__ . '/../../layout/empty.tpl.php';
+  }
+
+  // Visualizza la divisione degli appartamenti
+  public function displayZone()
+  {
+    $data = $this->data;
+
+    $this->createNavbar($data);
+    $this->createSidebar($data);
+
+    // Carica il contenuto della pagina
+    $this->content = view('user/configZone', compact('data'));
+
+    // carica il layout della pagina
+    include
+      __DIR__ . '/../../layout/empty.tpl.php';
+  }
+
+  public function displayArea()
+  {
+    $data = $this->data;
+
+    $this->createNavbar($data);
+    $this->createSidebar($data);
+
+    // Carica il contenuto della pagina
+    $this->content = view('user/configAreas', compact('data'));
+
+    // carica il layout della pagina
+    include
+      __DIR__ . '/../../layout/empty.tpl.php';
+  }
+
+  public function displayUsers()
+  {
+    $data = $this->data;
+
+    $this->createNavbar($data);
+    $this->createSidebar($data);
+
+    // Carica il contenuto della pagina
+    $this->content = view('user/configUsers', compact('data'));
 
     // carica il layout della pagina
     include

@@ -3,6 +3,8 @@
 namespace controllers;
 
 use models\users;
+use models\zones;
+use models\wallet;
 
 class api
 {
@@ -55,6 +57,74 @@ class api
                 $results['message'] = 'Password non corretta';
             }
         }
+
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode($results);
+    }
+
+
+    public function getZones($id = 0)
+    {
+        $zones = new zones($this->conn);
+        $listOFZones = $zones->getZones(['id' => $id]);
+
+
+        $results = [
+            'list_of_zones' => $listOFZones['results'],
+            'number_of_zones' => $listOFZones['row_count'],
+            // 'debug' => $listOFZones
+        ];
+
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode($results);
+    }
+
+    public function getAreas()
+    {
+        $zones = new zones($this->conn);
+        $listOFAreas = $zones->getAreas();
+
+
+        $results = [
+            'list_of_areas' => $listOFAreas['results'],
+            'number_of_areas' => $listOFAreas['row_count']
+        ];
+
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode($results);
+    }
+
+    public function getUsers()
+    {
+        // carico gli utenti
+        $users = new users($this->conn);
+        $usersList = $users->getUsers();
+
+
+        $results = [
+            'list_of_users' => $usersList['results'],
+            'number_of_users' => $usersList['row_count']
+        ];
+
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode($results);
+    }
+
+    public function getMovements()
+    {
+        // carico gli utenti
+        $movements = new wallet($this->conn);
+        $movementsLists = $movements->getMovements();
+
+
+        $results = [
+            'list_of_movements' => $movementsLists['results'],
+            'number_of_movements' => $movementsLists['row_count']
+        ];
 
         // rispondo al client:
         header('Content-type: application/json');
