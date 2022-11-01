@@ -26,7 +26,7 @@ class wallet
                 ,`wallet type`.`id` as `wallet type id`
                 ,`movements`.`userid`
 
-                ,`movements`.`data`
+                ,`movements`.`data` as `datetime`
                 ,`movements`.`value`
                 ,`wallet type`.`name`
                 ,`wallet type`.`negative`
