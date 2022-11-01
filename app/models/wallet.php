@@ -55,4 +55,58 @@ class wallet
 
         return $return;
     }
+
+
+    public function getWalletType(array $params = [])
+    {
+        $id = getKeyInArray($params, 'id', 0);
+        $return['id_passed'] = $id;
+
+        $typeMovements = getKeyInArray($params, 'typeMovement', -1);
+        $return['typeMovement_passed'] = $typeMovements;
+
+        switch ($typeMovements) {
+            case 'expense':
+                $negative = 1;
+                break;
+            case 'entrance':
+                $negative = 0;
+                break;
+            default:
+                $negative = -1;
+                break;
+        }
+        $return['negative_passed'] = $negative;
+
+        //FIXME imposta la zoneid dalla sessione
+        $sql = <<<'SQL'
+                SELECT * FROM `wallet type`
+                WHERE zonesid > 0
+            SQL;
+        if ($id > 0) {
+            $sql .= ' AND id = :id';
+        }
+        if ($negative > -1) {
+            $sql .= ' AND negative = :negative';
+        }
+        $return['sql_query'] = $sql;
+
+        $stm = $this->conn->prepare($sql);
+        $stm->execute();
+        if ($id > 0) {
+            $stm->execute(['id' => $id]);
+        }
+        if ($negative > -1) {
+            $stm->execute(['negative' => $negative]);
+        }
+
+        if ($stm) {
+            $return['results'] = $stm->fetchAll(\PDO::FETCH_OBJ);
+            $return['row_count'] =
+                $stm->rowCount();
+        }
+
+
+        return $return;
+    }
 }

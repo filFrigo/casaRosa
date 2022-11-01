@@ -93,10 +93,10 @@ $movements = [
 
                     <div class="mx-3">
                         <div class="input-group text-center row">
-                            <button type="button" class="btn btn-outline-danger col active"
-                                id="--btnEntranceCreateMovement">Entrata</button>
-                            <button type="button" class="btn btn-outline-success col"
-                                id="--btnExpeseCreateMovement">Spesa</button>
+                            <button type="button" class="btn btn-outline-danger col " id="--btnExpenseCreateMovement"
+                                data-type="expense">Spesa</button>
+                            <button type="button" class="btn btn-outline-success col" id="--btnEntranceCreateMovement"
+                                data-type="entrance">Entrata</button>
                         </div>
                     </div>
 
@@ -123,13 +123,13 @@ $movements = [
                             <label class="col-form-label">Categoria</label>
                         </div>
                         <div class="col text-end me-3">
-                            <button class="btn btn-link link-secondary text-decoration-none"><i
+                            <button class="btn btn-link link-secondary text-decoration-none" id="--btnNewCategory"><i
                                     class="fa-solid fa-plus"></i>
                                 Nuova
                                 Categoria</button>
                         </div>
                     </div>
-                    <div class="border rounded me-4 p-3">
+                    <div class="border rounded me-4 p-3" id="--categoryContainerNewMovements" tabindex="0">
 
 
                         <button class="btn btn-link text-decoration-none">
@@ -148,13 +148,20 @@ $movements = [
 
                     </div>
 
+                    <!-- Questo è un messaggio in caso di errori -->
+                    <div class="my-3 me-4 alert d-none" id="--alertCreateMovement">Questo è un errore!
+                    </div>
+
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal"><i
-                            class="fa-solid fa-delete-left"></i> Cancella</button>
-                    <button type="button" class="btn btn-primary"><i class="fa-solid fa-chevron-right"></i>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal"
+                        id="--btnResetNewMovement"><i class="fa-solid fa-delete-left"></i> Cancella</button>
+                    <button type="button" class="btn btn-primary" id="--btnSaveMovement"><i
+                            class="fa-solid fa-chevron-right"></i>
                         Inserisci</button>
-                    <button type="button" class="btn btn-primary"><i class="fa-solid fa-angles-right"></i>
+                    <button type="button" class="btn btn-primary" id="--btnContinueMovement"><i
+                            class="fa-solid fa-angles-right"></i>
                         Inserisci e continua</button>
 
                 </div>

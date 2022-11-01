@@ -116,7 +116,7 @@ class api
 
     public function getMovements()
     {
-        // carico gli utenti
+        // carico i movimenti
         $movements = new wallet($this->conn);
         $movementsLists = $movements->getMovements();
 
@@ -129,5 +129,39 @@ class api
         // rispondo al client:
         header('Content-type: application/json');
         echo json_encode($results);
+    }
+
+    public function getTypeMovements($typeMovement = null)
+    {
+        // carico le categorie
+        $categories = new wallet($this->conn);
+        $categoriesList = $categories->getWalletType(['typeMovement' => $typeMovement]);
+
+        $results = [
+            'type_movements' => $typeMovement,
+            'list_of_category' => $categoriesList['results'],
+            // 'debug_query_data' => $categoriesList
+        ];
+
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode($results);
+    }
+
+    public function storeMovement()
+    {
+
+        $json = json_decode(file_get_contents('php://input'));
+
+        $result = [
+            'state' => true,
+            'data_stored' => $json
+        ];
+
+        // TODO: salva i dati sul database
+
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode($result);
     }
 }

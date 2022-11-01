@@ -11,6 +11,16 @@ function formatDate(date) {
 }
 
 function formatTime(date) {
-  return date.getHours() + ":" + date.getMinutes();
+  return padTo2Digits(date.getHours()) + ":" + padTo2Digits(date.getMinutes());
   // + ":" + date.getSeconds();
+}
+
+function formatDatetime(date) {
+  const $date = [
+    date.getFullYear(),
+    padTo2Digits(date.getMonth() + 1),
+    padTo2Digits(date.getDate()),
+  ].join("-");
+
+  return $date + "T" + formatTime(date);
 }

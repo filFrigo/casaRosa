@@ -1,35 +1,332 @@
 // VARIABILI
 const movementsContainer = document.getElementById("--movementsContainer");
-//// Create Movements
+//// Create Movements Pulsanti
 const btnCreateMovement = document.getElementById("--btnCreateMovement");
 const btnEntranceCreateMovement = document.getElementById(
   "--btnEntranceCreateMovement"
 );
-const btnExpeseCreateMovement = document.getElementById(
-  "--btnExpeseCreateMovement"
+const btnExpenseCreateMovement = document.getElementById(
+  "--btnExpenseCreateMovement"
 );
 const btnSetToday = document.getElementById("--setToday");
+const btnNewCategory = document.getElementById("--btnNewCategory");
+const btnResetNewCategory = document.getElementById("--btnResetNewMovement");
+const btnSaveMovement = document.getElementById("--btnSaveMovement");
+const btnContinueMovement = document.getElementById("--btnContinueMovement");
+
+//// Variabili Movements
+const inputDatetimeCreateMovement = document.getElementById(
+  "--datetimeCreateMovement"
+);
+const inputValueCreateMovement = document.getElementById(
+  "--valueCreateMovement"
+);
+const categoryContainerNewMovements = document.getElementById(
+  "--categoryContainerNewMovements"
+);
+const alertCreateMovement = document.getElementById("--alertCreateMovement");
 
 // EVENTI
 document.addEventListener("DOMContentLoaded", (e) => loadMovements(e));
-btnCreateMovement.addEventListener("click", (e) => loadTypeMovements(e));
-btnEntranceCreateMovement.addEventListener("click", (e) =>
-  loadTypeMovements(e)
-);
-btnExpeseCreateMovement.addEventListener("click", (e) => loadTypeMovements(e));
-btnSetToday.addEventListener("click", (e) => setToday(e));
 
-// TODO: caricamento delle categorie della pagina /wallet sul modal "nuovo movimento"
-function loadTypeMovements(e) {
-  console.log("carico le categorie");
-  // caricamentodelle categorie
+btnCreateMovement.addEventListener("click", (e) => setTypeMovement(e));
+btnEntranceCreateMovement.addEventListener("click", (e) => setTypeMovement(e));
+btnExpenseCreateMovement.addEventListener("click", (e) => setTypeMovement(e));
+
+btnSetToday.addEventListener("click", (e) => setToday(e));
+btnNewCategory.addEventListener("click", (e) => displayNewCategory(e));
+btnResetNewCategory.addEventListener("click", (e) => resetNewCategory(e));
+btnSaveMovement.addEventListener("click", (e) => saveNewMovement(e));
+btnContinueMovement.addEventListener("click", (e) => continueMovement(e));
+
+// seleziono la categoria del movimento
+function setTypeMovement(e) {
+  const typeMovement = e.target.dataset?.type
+    ? e.target.dataset.type
+    : "expense";
+
+  // Rimuovi la selezione a quelli attivi
+  btnEntranceCreateMovement.classList.remove("active");
+  btnExpenseCreateMovement.classList.remove("active");
+
+  // In base al tipo movimento, seleziona il pulsante corretto:
+  switch (typeMovement) {
+    case "expense":
+    default:
+      btnExpenseCreateMovement.classList.add("active");
+      break;
+
+    case "entrance":
+      btnEntranceCreateMovement.classList.add("active");
+      break;
+  }
+
+  // Carica le categorie della selezione
+  displayTypeMovements(e, typeMovement);
 }
 
-// TODO: Imposta la data del form "nuovo movimento" su oggi
+//  caricamento delle categorie della pagina /wallet sul modal "nuovo movimento"
+function displayTypeMovements(e, typeMovement) {
+  // console.log("carico le: ", typeMovement);
+  $categories = loadTypeMovements(typeMovement);
+}
+
+// carica i tipi categorie
+function loadTypeMovements(typeMovement) {
+  fetch("/api/getTypeMovements/" + typeMovement, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      // console.log(data);
+      const list_of_category = data.list_of_category;
+      categoryContainerNewMovements.innerHTML = "";
+
+      list_of_category.forEach((category) => {
+        // console.log(movement);
+        const { id, name, negative, icon } = category;
+        const type = data.type_movements;
+
+        const color = type == "entrance" ? "success" : "danger";
+
+        const displayIcon = icon
+          ? `<i data-id="${id}" data-name="${name}" data-element="categoryNewMovement" class="${icon}"></i>`
+          : `<i data-id="${id}" data-name="${name}" data-element="categoryNewMovement" class="fa-regular fa-circle-question"></i>`;
+
+        const html = `
+              <button class="btn btn-link text-decoration-none --btnNewMovementCategories">
+                            <div class="input-group">
+                                <div class="btn btn-outline-${color}" data-id="${id}" data-name="${name}" data-element="categoryNewMovement" id="category-${id}">${name}</div>
+                                <label for="category-${id}" class="btn btn-${color}" data-id="${id}" data-element="categoryNewMovement" data-name="${name}">${displayIcon}</label>
+                            </div>
+                        </button>
+                `;
+        categoryContainerNewMovements.insertAdjacentHTML("afterbegin", html);
+      });
+
+      // Seleziona tutti i bottoni per gestire l'evento del click
+      const btnCategories = document.querySelectorAll(
+        ".--btnNewMovementCategories"
+      );
+
+      for (let element = 0; element < btnCategories.length; element++) {
+        const category = btnCategories[element];
+
+        //  aggiungi l'evento al click del bottone per selezionare
+        category.addEventListener("click", (e) => {
+          selectCategory(e);
+        });
+      }
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+
+// Crea la selezione della categoria:
+function selectCategory(e) {
+  // TARGET:
+  const currentCategory = e.target.dataset;
+  const target = document.getElementById("category-" + currentCategory.id);
+
+  //Disattivo gli i precedenti:
+  deselectCategory();
+
+  // Aggiungo la visualizzazione.
+  target.classList.add("active");
+  // console.log(target);
+}
+
+// Disattivo la selezione delle categorie
+function deselectCategory() {
+  const previusSelection = document.querySelectorAll(
+    '[data-element="categoryNewMovement"]'
+  );
+  previusSelection.forEach((ele) => {
+    ele.classList.contains("active") ? ele.classList.remove("active") : "";
+  });
+}
+
+// Imposta la data del form "nuovo movimento" su oggi
 function setToday(e) {
-  console.log("sovrascrivo la data ad oggi");
-  //Cerca l'imput
-  // imposta sull'imput la data di oggi
+  const today = new Date();
+  inputDatetimeCreateMovement.value = formatDatetime(today);
+}
+
+// Permette di visualizzare il menu di creazione di una  nuova categoria
+function displayNewCategory(e) {
+  console.log("visualizzo la creazione delle categorie");
+  // TODO: crea il modal per la creazione di una nuova categoria
+}
+
+// Resetta il form di inserimento di un nuovo movimento
+function resetNewCategory(e) {
+  inputDatetimeCreateMovement.value = "";
+  inputValueCreateMovement.value = "";
+  deselectCategory();
+  hideMessage(alertCreateMovement);
+}
+
+// Salva il nuovo movimento
+function saveNewMovement(e) {
+  const state = storeNewMovement(e);
+
+  if (state) {
+    // TODO: chiudo il form una volta inviato con successo
+    console.log("chiudo il form");
+  }
+}
+
+// Salva e crea un nuovo movimento.
+function continueMovement(e) {
+  storeNewMovement(e);
+  // TODO: Resetta il form se inserito con successo e inseriscine un altro.
+  resetNewCategory(e);
+}
+
+// Salvo i dati sul database
+function storeNewMovement(e) {
+  //  Recupero i dati da salvare:
+  const localData = getLocalNewMovementData();
+
+  // Verifico i dati inseriti.
+  const data_is_corrent = verifyData(localData); // boolean
+  // console.log("form_verified?", data_is_corrent, "data:", localData);
+
+  if (data_is_corrent) {
+    // Crea il salvataggio del movimento
+    pushNewMovement(localData);
+    // console.log("provo a salvare i dati");
+  }
+
+  return false;
+}
+
+// FIXME: Crea il salvataggio del movimento
+function pushNewMovement(localData) {
+  fetch("/api/storeMovement", {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify({ localData }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      // TODO : Verifica che la chiamata non restituisca errori
+      console.log(data);
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+
+// Recupero i dati da salvare:
+function getLocalNewMovementData() {
+  let newMovement = new Object();
+  // recupero la data
+  newMovement.data = inputDatetimeCreateMovement.value ?? null;
+
+  //  recupero l'importo
+  newMovement.value = inputValueCreateMovement.value ?? null;
+
+  // recupero la categoria
+  newMovement.category = "";
+  const currentCategory = document.querySelectorAll(
+    '[data-element="categoryNewMovement"]'
+  );
+  currentCategory.forEach((category) => {
+    category.classList.contains("active")
+      ? (newMovement.category = category.dataset.id)
+      : "";
+  });
+
+  // console.log("object new movement", newMovement);
+  return newMovement;
+}
+
+function verifyData(localData) {
+  // variabili
+  let state = false;
+  const { data, value, category } = localData;
+
+  let message = new Object();
+  hideMessage(alertCreateMovement);
+
+  // verifico i dati inseriti
+  if (!data) {
+    // console.log(inputDatetimeCreateMovement);
+    inputDatetimeCreateMovement.focus();
+
+    // Visualizzo l'errore
+    message.message = "Inserisci la data";
+    message.class = "alert-danger";
+    displayMessage(alertCreateMovement, message);
+    return state;
+  }
+  //TODO: verifico la data è valida
+
+  // Verifico se l'importo è inserito l'importo
+  if (!value) {
+    inputValueCreateMovement.focus();
+
+    message.message = "Inserisci l'importo";
+    message.class = "alert-danger";
+    displayMessage(alertCreateMovement, message);
+
+    return state;
+  }
+
+  // Verifico l'importo
+  if (value < 0) {
+    inputValueCreateMovement.focus();
+
+    message.message = "L'importo deve essere maggiore a 0";
+    message.class = "alert-warning";
+    displayMessage(alertCreateMovement, message);
+
+    return state;
+  }
+  // VERIFICO SE c'è una categoria
+  if (!category) {
+    // console.log(categoryContainerNewMovements);
+    categoryContainerNewMovements.focus();
+
+    message.message = "Inserisci la categoria";
+    message.class = "alert-danger";
+    displayMessage(alertCreateMovement, message);
+
+    return state;
+  }
+  // TODO: Verifico se la categoria esiste.
+
+  state = true;
+  return state;
+}
+
+// Visualizza i messaggi
+function displayMessage(where, content) {
+  where.classList.remove("d-none");
+
+  // Se passo una classe, l'inserisco
+  content?.class ? where.classList.add(content.class) : "alert-secondary";
+
+  where.innerHTML = content.message;
+}
+
+// Nasconde i messaggi
+function hideMessage(where) {
+  // console.log(where);
+  where.classList.add("d-none");
 }
 
 // Azioni da fare al caricamento della pagina /wallet

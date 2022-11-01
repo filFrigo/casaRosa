@@ -27,9 +27,14 @@ return [
 
       'api/getMovements' => 'controllers\api@getMovements',
 
+      'api/getTypeMovements' => 'controllers\api@getTypeMovements',
+      'api/getTypeMovements/:typeMovements' => 'controllers\api@getTypeMovements',
+
     ],
     'POST' => [
       'api/login' => 'controllers\api@login',
+      'api/storeMovement' => 'controllers\api@storeMovement',
+
     ]
   ],
 ];
