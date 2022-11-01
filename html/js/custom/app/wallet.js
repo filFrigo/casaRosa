@@ -19,13 +19,13 @@ btnEntranceCreateMovement.addEventListener("click", (e) =>
 btnExpeseCreateMovement.addEventListener("click", (e) => loadTypeMovements(e));
 btnSetToday.addEventListener("click", (e) => setToday(e));
 
-// caricamento delle categorie della pagina /wallet sul modal "nuovo movimento"
+// TODO: caricamento delle categorie della pagina /wallet sul modal "nuovo movimento"
 function loadTypeMovements(e) {
   console.log("carico le categorie");
   // caricamentodelle categorie
 }
 
-// Imposta la data del form "nuovo movimento" su oggi
+// TODO: Imposta la data del form "nuovo movimento" su oggi
 function setToday(e) {
   console.log("sovrascrivo la data ad oggi");
   //Cerca l'imput
