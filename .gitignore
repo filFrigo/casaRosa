@@ -4,3 +4,5 @@ docker-file
 docker-compose.yml
 config/app.database.php
 casaRosa.code-workspace
+backup
+backup/**
