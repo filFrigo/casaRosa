@@ -154,7 +154,8 @@ class api
         $json = json_decode(file_get_contents('php://input'));
 
         $result = [
-            'state' => true,
+            'state' => false,
+            'message' => '',
             'data_stored' => $json
         ];
 

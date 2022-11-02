@@ -177,6 +177,8 @@ function resetNewCategory(e) {
 function saveNewMovement(e) {
   const state = storeNewMovement(e);
 
+  console.log("save new movement state", state);
+
   if (state) {
     // TODO: chiudo il form una volta inviato con successo
     console.log("chiudo il form");
@@ -185,9 +187,12 @@ function saveNewMovement(e) {
 
 // Salva e crea un nuovo movimento.
 function continueMovement(e) {
-  storeNewMovement(e);
-  // TODO: Resetta il form se inserito con successo e inseriscine un altro.
-  resetNewCategory(e);
+  const state = storeNewMovement(e);
+
+  if (state) {
+    // TODO: Resetta il form se inserito con successo e inseriscine un altro.
+    resetNewCategory(e);
+  }
 }
 
 // Salvo i dati sul database
@@ -201,7 +206,13 @@ function storeNewMovement(e) {
 
   if (data_is_corrent) {
     // Crea il salvataggio del movimento
-    pushNewMovement(localData);
+    const state = pushNewMovement(localData);
+
+    console.log("store new movement state", state);
+
+    if (!state) return false;
+    if (state) return true;
+
     // console.log("provo a salvare i dati");
   }
 
@@ -223,7 +234,11 @@ function pushNewMovement(localData) {
     })
     .then((data) => {
       // TODO : Verifica che la chiamata non restituisca errori
-      console.log(data);
+      console.log("fetch", data);
+
+      console.log("fetch22", data.state);
+
+      return data.state;
     })
     .catch(function (error) {
       console.error(error);
