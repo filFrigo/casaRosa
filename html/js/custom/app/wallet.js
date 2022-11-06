@@ -14,6 +14,9 @@ const btnResetNewCategory = document.getElementById("--btnResetNewMovement");
 const btnSaveMovement = document.getElementById("--btnSaveMovement");
 const btnContinueMovement = document.getElementById("--btnContinueMovement");
 
+// MODALS
+const modalcreateMovement = document.getElementById("createMovement");
+
 //// Variabili Movements
 const inputDatetimeCreateMovement = document.getElementById(
   "--datetimeCreateMovement"
@@ -174,54 +177,75 @@ function resetNewCategory(e) {
 }
 
 // Salva il nuovo movimento
-function saveNewMovement(e) {
-  const state = storeNewMovement(e);
+async function saveNewMovement(e) {
+  const state = await storeNewMovement(e);
 
-  console.log("save new movement state", state);
+  // console.log("save new movement state", state);
 
-  if (state) {
-    // TODO: chiudo il form una volta inviato con successo
-    console.log("chiudo il form");
+  if (state.state) {
+    // chiudo il modal una volta inviato con successo
+    const modalcreateMovement = document.getElementById("createMovement");
+    const myModal = bootstrap.Modal.getInstance(modalcreateMovement);
+    myModal.hide();
+    // Pulisco i dati
+    resetNewCategory(e);
+  } else {
+    let message = new Object();
+    message.message = "Errore: " + state?.message;
+    message.class = "alert-danger";
+    displayMessage(alertCreateMovement, message);
   }
 }
 
 // Salva e crea un nuovo movimento.
-function continueMovement(e) {
-  const state = storeNewMovement(e);
+async function continueMovement(e) {
+  const state = await storeNewMovement(e);
+  let message = new Object();
 
-  if (state) {
-    // TODO: Resetta il form se inserito con successo e inseriscine un altro.
+  if (state.state) {
+    // Pulisco i dati
     resetNewCategory(e);
+    message.message = "Movimento inserito, puoi continuare";
+    message.class = "alert-success";
+    displayMessage(alertCreateMovement, message);
+  } else {
+    message.message = "Errore: " + state?.message;
+    message.class = "alert-danger";
+    displayMessage(alertCreateMovement, message);
   }
 }
 
 // Salvo i dati sul database
-function storeNewMovement(e) {
+async function storeNewMovement(e) {
   //  Recupero i dati da salvare:
   const localData = getLocalNewMovementData();
-
   // Verifico i dati inseriti.
   const data_is_corrent = verifyData(localData); // boolean
-  // console.log("form_verified?", data_is_corrent, "data:", localData);
-
   if (data_is_corrent) {
     // Crea il salvataggio del movimento
-    const state = pushNewMovement(localData);
+    const state = await pushNewMovement(localData);
 
-    console.log("store new movement state", state);
+    // Se è andato con successo creo il movimento sul DOM
+    if (state.state) {
+      console.log(state);
 
-    if (!state) return false;
-    if (state) return true;
+      let mov = new Object();
+      mov.id = state.last_id;
+      mov.value = localData.value;
+      mov.datetime = localData.data;
+      mov.wallet_type_id = localData.category;
+      // displayMovementRecord(mov);
+    }
 
-    // console.log("provo a salvare i dati");
+    // Passo il risultato per la visualizzazione dell'utente.
+    return state;
   }
-
   return false;
 }
 
-// FIXME: Crea il salvataggio del movimento
-function pushNewMovement(localData) {
-  fetch("/api/storeMovement", {
+// Crea il salvataggio del movimento
+async function pushNewMovement(localData) {
+  const res = await fetch("/api/storeMovement", {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -233,16 +257,14 @@ function pushNewMovement(localData) {
       return response.json();
     })
     .then((data) => {
-      // TODO : Verifica che la chiamata non restituisca errori
-      console.log("fetch", data);
-
-      console.log("fetch22", data.state);
-
-      return data.state;
+      // Gestisci i ritorni dei messaggi
+      return data;
     })
     .catch(function (error) {
       console.error(error);
     });
+
+  return res;
 }
 
 // Recupero i dati da salvare:
@@ -288,7 +310,7 @@ function verifyData(localData) {
     displayMessage(alertCreateMovement, message);
     return state;
   }
-  //TODO: verifico la data è valida
+  //TODO: verifico se la data è valida
 
   // Verifico se l'importo è inserito l'importo
   if (!value) {
@@ -328,7 +350,7 @@ function verifyData(localData) {
   return state;
 }
 
-// Visualizza i messaggi
+//  Visualizza i messaggi
 function displayMessage(where, content) {
   where.classList.remove("d-none");
 
@@ -340,8 +362,9 @@ function displayMessage(where, content) {
 
 // Nasconde i messaggi
 function hideMessage(where) {
-  // console.log(where);
   where.classList.add("d-none");
+  // TODO: rimuovi qualsiasi classe che inizia con alert-
+  where.classList.remove("alert-secondary", "alert-danger", "alert-success");
 }
 
 // Azioni da fare al caricamento della pagina /wallet
@@ -364,16 +387,54 @@ function loadMovements(e) {
 
       movementsContainer.innerHTML = "";
       list_of_movements.forEach((movement) => {
-        // console.log(movement);
-        const { datetime, id, name, negative, userid, value, wallet_type_id } =
-          movement;
+        // // console.log(movement);
+        // const { datetime, id, name, negative, userid, value, wallet_type_id } =
+        //   movement;
 
-        const expeseDescription = negative == 1 ? "spesa" : "entrata";
-        const color = negative == 1 ? "danger" : "success";
+        // const expeseDescription = negative == 1 ? "spesa" : "entrata";
+        // const color = negative == 1 ? "danger" : "success";
 
-        const date = new Date(datetime);
+        // const date = new Date(datetime);
 
-        const html = `
+        // const html = `
+        //         <tr class="text-start">
+        //             <td>
+        //               <span data-date="${datetime}">
+        //                 <span>${formatDate(date)}</span>
+        //                 <span class="d-none d-md-inline">${formatTime(
+        //                   date
+        //                 )}</span>
+        //               </span>
+        //             </td>
+        //             <td>${name}</td>
+        //             <td class="text-center"><div class="badge bg-${color}">${expeseDescription}</div></td>
+        //             <td class="text-end">€${parseFloat(value / 100).toFixed(
+        //               2
+        //             )}</td>
+        //             <td class="text-end"><button class="btn btn-link --btnEditUser" data-id="${id}"><i class="fa-solid fa-pencil text-secondary"></i></button></td>
+        //         </tr>
+        //         `;
+        html = displayMovementRecord(movement);
+        movementsContainer.insertAdjacentHTML("beforebegin", html);
+      });
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
+
+// SHOW MOVEMENTS
+function displayMovementRecord(movement) {
+  // console.log(movement);
+  const { datetime, id, name, negative, userid, value, wallet_type_id } =
+    movement;
+
+  const expeseDescription = negative == 1 ? "spesa" : "entrata";
+  const color = negative == 1 ? "danger" : "success";
+
+  const date = new Date(datetime);
+
+  const html = `
                 <tr class="text-start">
                     <td>
                       <span data-date="${datetime}">  
@@ -391,10 +452,5 @@ function loadMovements(e) {
                     <td class="text-end"><button class="btn btn-link --btnEditUser" data-id="${id}"><i class="fa-solid fa-pencil text-secondary"></i></button></td>
                 </tr>
                 `;
-        movementsContainer.insertAdjacentHTML("beforebegin", html);
-      });
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
+  return html;
 }

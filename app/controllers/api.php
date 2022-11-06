@@ -160,6 +160,15 @@ class api
         ];
 
         // TODO: salva i dati sul database
+        $wallet = new wallet($this->conn);
+        $istance = $wallet->storeMovement($json);
+
+        if (!$istance['last_id']) {
+            $result['message'] = 'Inserimento non valido';
+        } else {
+            $result['last_id'] = $istance['last_id'];
+            $result['state'] = true;
+        }
 
         // rispondo al client:
         header('Content-type: application/json');

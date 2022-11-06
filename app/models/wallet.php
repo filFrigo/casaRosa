@@ -109,4 +109,45 @@ class wallet
 
         return $return;
     }
+
+
+    function storeMovement($json)
+    {
+        $return['error'] = '';
+        $data = $json->localData;
+        // $return['data_passed'] = $data;
+
+        $date = $data->data; //'2022-11-05 15:37:39.000000'
+        $value =  $data->value;
+        $category = (int) $data->category;
+        // FIXME: recupera l'userid dalla sessione
+        $userid = 1;
+
+
+        $sql = <<<'SQL'
+                INSERT INTO `movements` (`id`, `data`, `wallet type id`, `value`, `userid`) 
+                VALUES (NULL, :date, :category, :value, :userid);
+            SQL;
+        // $return['sql_query'] = $sql;
+
+        $stm = $this->conn->prepare($sql);
+
+        $stm->bindParam(':date', $date);
+        $stm->bindParam(':category', $category);
+        $stm->bindParam(':value', $value);
+        $stm->bindParam(':userid', $userid);
+
+        $stm->execute();
+
+
+
+        if ($stm) {
+            $return['results'] = $stm->fetchAll(\PDO::FETCH_OBJ);
+            $return['row_count'] =
+                $stm->rowCount();
+            $return['last_id'] = (int) $this->conn->lastInsertId();
+        }
+
+        return $return;
+    }
 }
