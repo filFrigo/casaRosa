@@ -167,6 +167,7 @@ class api
             $result['message'] = 'Inserimento non valido';
         } else {
             $result['last_id'] = $istance['last_id'];
+            $result['last_mov_data'] = $istance['last_mov_data'];
             $result['state'] = true;
         }
 

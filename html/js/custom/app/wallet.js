@@ -227,14 +227,10 @@ async function storeNewMovement(e) {
 
     // Se è andato con successo creo il movimento sul DOM
     if (state.state) {
-      console.log(state);
-
-      let mov = new Object();
-      mov.id = state.last_id;
-      mov.value = localData.value;
-      mov.datetime = localData.data;
-      mov.wallet_type_id = localData.category;
-      // displayMovementRecord(mov);
+      // console.log(state);
+      // inserisci il mov sul dom
+      const html = displayMovementRecord(state.last_mov_data.results[0]);
+      movementsContainer.insertAdjacentHTML("afterbegin", html);
     }
 
     // Passo il risultato per la visualizzazione dell'utente.
@@ -387,35 +383,8 @@ function loadMovements(e) {
 
       movementsContainer.innerHTML = "";
       list_of_movements.forEach((movement) => {
-        // // console.log(movement);
-        // const { datetime, id, name, negative, userid, value, wallet_type_id } =
-        //   movement;
-
-        // const expeseDescription = negative == 1 ? "spesa" : "entrata";
-        // const color = negative == 1 ? "danger" : "success";
-
-        // const date = new Date(datetime);
-
-        // const html = `
-        //         <tr class="text-start">
-        //             <td>
-        //               <span data-date="${datetime}">
-        //                 <span>${formatDate(date)}</span>
-        //                 <span class="d-none d-md-inline">${formatTime(
-        //                   date
-        //                 )}</span>
-        //               </span>
-        //             </td>
-        //             <td>${name}</td>
-        //             <td class="text-center"><div class="badge bg-${color}">${expeseDescription}</div></td>
-        //             <td class="text-end">€${parseFloat(value / 100).toFixed(
-        //               2
-        //             )}</td>
-        //             <td class="text-end"><button class="btn btn-link --btnEditUser" data-id="${id}"><i class="fa-solid fa-pencil text-secondary"></i></button></td>
-        //         </tr>
-        //         `;
         html = displayMovementRecord(movement);
-        movementsContainer.insertAdjacentHTML("beforebegin", html);
+        movementsContainer.insertAdjacentHTML("afterbegin", html);
       });
     })
     .catch(function (error) {
