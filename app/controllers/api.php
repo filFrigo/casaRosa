@@ -51,16 +51,36 @@ class api
 
             if ($user->password == $password) {
                 $results['success'] = true;
-                // GENERO LA SESSIONE
+                // distruggo la password
+                unset($user->password);
 
+                // TODO: genero i dati di sessione
+                $_SESSION["userLogin"] = 'true';
+                $_SESSION["userData"] = [
+                    'email' => $login,
+                    'user_id' => $user->id,
+                    'user_name' => $user->nome,
+                    'user_surname' => $user->cognome,
+                ];
             } else {
                 $results['message'] = 'Password non corretta';
             }
         }
 
+
+
+
         // rispondo al client:
         header('Content-type: application/json');
         echo json_encode($results);
+    }
+
+    public function logout()
+    {
+        session_destroy();
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode(['logout_user' => true]);
     }
 
 

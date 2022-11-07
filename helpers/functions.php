@@ -120,3 +120,14 @@ function transformDecimal($value, $needle)
   // Ritorno il valore formattato
   return $importo . substr($decimali, 0, 2);
 }
+
+function sessionData($param)
+{
+  // Entro nei dati di sessione
+  $sessionData = getKeyInArray($_SESSION, 'userData', []);
+
+  if ($sessionData == []) {
+    return false;
+  }
+  return getKeyInArray($sessionData, $param, false);
+}

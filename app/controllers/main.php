@@ -60,7 +60,7 @@ class main
   }
 
   // Visualizza la divisione degli appartamenti
-  public function displayZone()
+  public function displayConfigZone()
   {
     $data = $this->data;
 
@@ -75,7 +75,7 @@ class main
       __DIR__ . '/../../layout/empty.tpl.php';
   }
 
-  public function displayArea()
+  public function displayConfigArea()
   {
     $data = $this->data;
 
@@ -90,7 +90,7 @@ class main
       __DIR__ . '/../../layout/empty.tpl.php';
   }
 
-  public function displayUsers()
+  public function displayConfigUsers()
   {
     $data = $this->data;
 
@@ -119,5 +119,21 @@ class main
     $this->sidebar =
 
       __DIR__ . '/../../layout/sidebars/sidebar.tpl.php';
+  }
+
+  // visualizza la suddivisione degli spazi della zona
+  public function displaySpaces()
+  {
+    $data = $this->data;
+
+    $this->createNavbar($data);
+    $this->createSidebar($data);
+
+    // Carica il contenuto della pagina
+    $this->content = view('zone/view', compact('data'));
+
+    // carica il layout della pagina
+    include
+      __DIR__ . '/../../layout/empty.tpl.php';
   }
 }

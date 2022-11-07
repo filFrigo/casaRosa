@@ -8,7 +8,7 @@
         </li>
 
         <li class="nav-item">
-            <a class="btn btn-link link-light" href="/zone">
+            <a class="btn btn-link link-light" href="/spaces">
                 <i class="fa-solid fa-hotel"></i>
             </a>
         </li>

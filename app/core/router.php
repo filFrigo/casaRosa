@@ -40,6 +40,14 @@ class router
     $method = $_SERVER['REQUEST_METHOD'];                       # GET || POST
 
 
+    $url_is_api = substr($url, 0, 4) == 'api/';
+    $user_not_logged = empty($_SESSION["userLogin"]);
+
+    // verifica: se non sono loggato e non sono sulla pagina login oppure non è un API, fai un redirect per loggarmi
+    if ($url <> 'login' && $user_not_logged && !$url_is_api) {
+      // portami sulla pagina principale
+      redirect('/login');
+    }
 
     # Interpreta la rotta
     return $this->processUri($url, $method);

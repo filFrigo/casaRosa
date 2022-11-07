@@ -2,10 +2,14 @@ const inputSearch = document.getElementById("--searchAreas");
 const displayAreas = document.getElementById("--areasLists");
 const btnAreas = document.getElementById("--btnAreas");
 
+const btnLogout = document.getElementById("--btnLogout");
+
 // EVENTS
 
 btnAreas.addEventListener("click", (e) => loadAreas(e));
 inputSearch.addEventListener("keydown", (e) => searchArea(e));
+
+btnLogout.addEventListener("click", (e) => logout(e));
 
 // FUNZIONI
 function loadAreas(e) {
@@ -42,4 +46,24 @@ function loadAreas(e) {
 
 function searchArea(e) {
   console.log("search input: ", e.key);
+}
+
+function logout(e) {
+  fetch("/logout", {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      // display zones on container
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
 }

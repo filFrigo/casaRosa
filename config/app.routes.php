@@ -11,12 +11,13 @@ return [
       'dashboard' => 'controllers\main@displayHome',
 
       'wallet' => 'controllers\main@displayWallet',
+      'spaces' => 'controllers\main@displaySpaces',
 
-      'config/zone' => 'controllers\main@displayZone',
-      'config/areas' => 'controllers\main@displayArea',
-      'config/users' => 'controllers\main@displayUsers',
+      'config/zone' => 'controllers\main@displayConfigZone',
+      'config/areas' => 'controllers\main@displayConfigArea',
+      'config/users' => 'controllers\main@displayConfigUsers',
 
-
+      'logout' => 'controllers\api@logout',
 
       'api/zones' => 'controllers\api@getZones',
       'api/zones/:id' => 'controllers\api@getZones',

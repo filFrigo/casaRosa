@@ -14,22 +14,18 @@ session_start();
 
 
 #Carica le funzioni dell'app
-require_once __DIR__.'/../helpers/functions.php';
+require_once __DIR__ . '/../helpers/functions.php';
 
 
 try {
   // Cerca di caricare automaticamente le Classi:
-  if (! spl_autoload_register('autoloadClass')) {
-    throw new \Exception('autoload does not exist',2);
+  if (!spl_autoload_register('autoloadClass')) {
+    throw new \Exception('autoload does not exist', 2);
   }
 
 
   new core\app();
-
-
-
-}
-catch (Throwable $e) {
+} catch (Throwable $e) {
   echo "Message: " . $e->getMessage();
   echo "<br>Code: " . $e->getCode();
 }
