@@ -54,6 +54,9 @@ class api
                 // distruggo la password
                 unset($user->password);
 
+                $zones = new zones($this->conn);
+                $zones = $zones->getUserZone($user->id);
+
                 // TODO: genero i dati di sessione
                 $_SESSION["userLogin"] = 'true';
                 $_SESSION["userData"] = [
@@ -61,6 +64,10 @@ class api
                     'user_id' => $user->id,
                     'user_name' => $user->nome,
                     'user_surname' => $user->cognome,
+                    'zones_allowed' => $zones['allowed'],
+                    'zone_id' => $zones['default']['id'],
+                    'zone_clientid' => $zones['default']['zone_clientid'],
+                    'zone_name' => $zones['default']['zone_name'],
                 ];
             } else {
                 $results['message'] = 'Password non corretta';

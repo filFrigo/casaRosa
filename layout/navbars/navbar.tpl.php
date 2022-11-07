@@ -34,7 +34,7 @@ $brand = getKeyInArray($data['appParams'], 'brandName', '')
                         </div>
                         <div>
                             <div>
-                                {nome_azienda}
+                                <?= sessionData('zone_name') ?? '{zone_name}' ?>
                             </div>
                             <div>
                                 <?= sessionData('email') ?? '{user_email}' ?>
@@ -75,7 +75,9 @@ $brand = getKeyInArray($data['appParams'], 'brandName', '')
     <div class="offcanvas offcanvas-end" tabindex="-1" id="leftMenu"">
             <div class=" offcanvas-header">
         <div class="offcanvas-title" id="leftMenuLabel">
-            <h5><?= $brand ?></h5>
+            <h5><?= sessionData('zone_name') ?? '{zone_name}' ?>
+                [<?= sessionData('zone_clientid') ?? '{zone_clientid}' ?>]
+            </h5>
             <div><?= sessionData('email') ?? '{user_email}' ?></div>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
