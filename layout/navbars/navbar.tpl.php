@@ -25,8 +25,7 @@ $brand = getKeyInArray($data['appParams'], 'brandName', '')
 
             <!-- cambio istanza -->
             <div>
-                <button class="btn btn-link link-dark text-decoration-none" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#leftMenu" aria-controls="offcanvasExample" id="--btnAreas">
+                <button class="btn btn-link link-dark text-decoration-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftMenu" aria-controls="offcanvasExample" id="--btnAreas">
                     <div class="d-flex flex-row align-items-center ">
 
                         <div class="d-flex align-items-center me-2">
@@ -91,8 +90,7 @@ $brand = getKeyInArray($data['appParams'], 'brandName', '')
                         <i class=" h6 fa-solid fa-magnifying-glass"></i>
 
                     </div>
-                    <input class="form-control  border-0" placeholder="cerca struttura.." type="search"
-                        id="--searchAreas">
+                    <input class="form-control  border-0" placeholder="cerca struttura.." type="search" id="--searchAreas">
                 </div>
             </div>
         </div>
@@ -129,8 +127,7 @@ $brand = getKeyInArray($data['appParams'], 'brandName', '')
                     Impostazioni Zona</a>
             </div>
             <div>
-                <a href="/config/areas" class="btn btn-link text-decoration-none"><i
-                        class="fa-solid fa-people-roof"></i>
+                <a href="/config/areas" class="btn btn-link text-decoration-none"><i class="fa-solid fa-people-roof"></i>
                     Suddivisione Aree</a>
             </div>
 

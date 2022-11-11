@@ -20,11 +20,14 @@ return [
       'logout' => 'controllers\api@logout',
 
       'api/zones' => 'controllers\api@getZones',
+      'api/zones_allowed' => 'controllers\api@getZonesAllowed',
       'api/zones/:id' => 'controllers\api@getZones',
+      'api/changeZone/:id' => 'controllers\api@changeZone',
 
       'api/areas' => 'controllers\api@getAreas',
 
-      'api/getUsers' => 'controllers\api@getUsers',
+      // 'api/getUsers' => 'controllers\api@getUsers',
+      'api/getUsersZone' => 'controllers\api@getUsersZone',
 
       'api/getMovements' => 'controllers\api@getMovements',
 

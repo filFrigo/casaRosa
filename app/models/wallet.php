@@ -20,6 +20,9 @@ class wallet
         $id = getKeyInArray($params, 'id', 0);
         // $return['id_passed'] = $id;
 
+        $session = getKeyInArray($_SESSION, 'userData', []);
+        $zoneid = getKeyInArray($session, 'zone_id', 0);
+
         $sql = <<<'SQL'
                 SELECT `movements`.`id` 
                 ,`wallet type`.`id` as `wallet type id`
@@ -29,27 +32,31 @@ class wallet
                 ,`wallet type`.`name`
                 ,`wallet type`.`negative`
                 FROM `movements` 
-                join `wallet type` on `wallet type`.`id` = `movements`.`wallet type id` 
+                join `wallet type` on `wallet type`.`id` = `movements`.`wallet type id`
+                WHERE `movements`.`zoneid` = :zoneid
             SQL;
         if ($id > 0) {
-            $sql .= ' WHERE `movements`.`id` = :id ';
+            $sql .= ' AND `movements`.`id` = :id ';
         }
-        $sql .= 'order by `movements`.`data` desc';
+        $sql .= ' order by `movements`.`data` desc';
 
         // $return['sql_query'] = $sql;
 
         $stm = $this->conn->prepare($sql);
-        $stm->execute();
+
+        $stm->bindParam(':zoneid', $zoneid);
+
         if ($id > 0) {
-            $stm->execute(['id' => $id]);
+            $stm->bindParam(':id', $id);
+            // $stm->execute(['id' => $id]);
         }
+        $stm->execute();
 
         if ($stm) {
             $return['results'] = $stm->fetchAll(\PDO::FETCH_OBJ);
             $return['row_count'] =
                 $stm->rowCount();
         }
-
 
         return $return;
     }
@@ -59,6 +66,9 @@ class wallet
     {
         $id = getKeyInArray($params, 'id', 0);
         $return['id_passed'] = $id;
+
+        $session = getKeyInArray($_SESSION, 'userData', []);
+        $zoneid = getKeyInArray($session, 'zone_id', 0);
 
         $typeMovements = getKeyInArray($params, 'typeMovement', -1);
         $return['typeMovement_passed'] = $typeMovements;
@@ -79,7 +89,7 @@ class wallet
         //FIXME imposta la zoneid dalla sessione
         $sql = <<<'SQL'
                 SELECT * FROM `wallet type`
-                WHERE zonesid > 0
+                WHERE zonesid = :zoneid
             SQL;
         if ($id > 0) {
             $sql .= ' AND id = :id';
@@ -90,13 +100,16 @@ class wallet
         $return['sql_query'] = $sql;
 
         $stm = $this->conn->prepare($sql);
-        $stm->execute();
+
+        $stm->bindParam(':zoneid', $zoneid);
+
         if ($id > 0) {
-            $stm->execute(['id' => $id]);
+            $stm->bindParam(':id', $id);
         }
         if ($negative > -1) {
-            $stm->execute(['negative' => $negative]);
+            $stm->bindParam(':negative', $negative);
         }
+        $stm->execute();
 
         if ($stm) {
             $return['results'] = $stm->fetchAll(\PDO::FETCH_OBJ);
@@ -111,6 +124,10 @@ class wallet
 
     function storeMovement($json)
     {
+        // REcupero la sessione
+        $session = getKeyInArray($_SESSION, 'userData', []);
+        $zoneid = getKeyInArray($session, 'zone_id', 0);
+
         $return['error'] = '';
         $data = $json->localData;
         // $return['data_passed'] = $data;
@@ -161,13 +178,14 @@ class wallet
 
 
         $sql = <<<'SQL'
-                INSERT INTO `movements` (`id`, `data`, `wallet type id`, `value`, `userid`) 
-                VALUES (NULL, :date, :category, :value, :userid);
+                INSERT INTO `movements` (`id`,`zoneid`, `data`, `wallet type id`, `value`, `userid`) 
+                VALUES (NULL, :zoneid, :date, :category, :value, :userid);
             SQL;
         // $return['sql_query'] = $sql;
 
         $stm = $this->conn->prepare($sql);
 
+        $stm->bindParam(':zoneid', $zoneid);
         $stm->bindParam(':date', $date);
         $stm->bindParam(':category', $category);
         $stm->bindParam(':value', $value);

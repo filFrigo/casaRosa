@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", (e) => loadUsers(e));
 // FUNZIONI
 function loadUsers(e) {
   // CARICA GLI UTENTI DELLA ZONA
-  fetch("/api/getUsers", {
+  fetch("/api/getUsersZone", {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

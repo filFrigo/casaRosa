@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", (e) => loadZones(e));
 // FUNZIONI
 function loadZones(e) {
   // Carica le zone
-  fetch("/api/zones/1", {
+  fetch("/api/zones/", {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

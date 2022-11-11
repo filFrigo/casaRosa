@@ -91,10 +91,16 @@ class api
     }
 
 
-    public function getZones($id = 0)
+    public function getZones($zoneid = 0)
     {
+        $session = getKeyInArray($_SESSION, 'userData', []);
+
+        if ($zoneid == 0) {
+            $zoneid = getKeyInArray($session, 'zone_id', 0);
+        }
+
         $zones = new zones($this->conn);
-        $listOFZones = $zones->getZones(['id' => $id]);
+        $listOFZones = $zones->getZones(['id' => $zoneid]);
 
 
         $results = [
@@ -106,6 +112,33 @@ class api
         // rispondo al client:
         header('Content-type: application/json');
         echo json_encode($results);
+    }
+
+    public function getZonesAllowed()
+    {
+        $session = getKeyInArray($_SESSION, 'userData', []);
+        $zones = getKeyInArray($session, 'zones_allowed', []);
+
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode(['list_of_zones' => $zones]);
+    }
+
+    // CAMBIA IL FOCUS DELLA ZONA
+    public function changeZone($zoneid = 0)
+    {
+        $zones = new zones($this->conn);
+        $zoneData = $zones->getZones(['id' => $zoneid]);
+        $zone = $zoneData['results'][0];
+
+        // FIXME: verifica se posso visualizzare la zona
+        $_SESSION['userData']['zone_id'] = $zone->id;
+        $_SESSION['userData']['zone_clientid'] = $zone->clientid;
+        $_SESSION['userData']['zone_name'] = $zone->name;
+
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode(['state' => true]);
     }
 
     public function getAreas()
@@ -124,16 +157,33 @@ class api
         echo json_encode($results);
     }
 
-    public function getUsers()
+    // public function getUsers()
+    // {
+    //     // carico gli utenti
+    //     $users = new users($this->conn);
+    //     $usersList = $users->getUsers();
+
+
+    //     $results = [
+    //         'list_of_users' => $usersList['results'],
+    //         'number_of_users' => $usersList['row_count']
+    //     ];
+
+    //     // rispondo al client:
+    //     header('Content-type: application/json');
+    //     echo json_encode($results);
+    // }
+
+    public function getUsersZone()
     {
         // carico gli utenti
         $users = new users($this->conn);
-        $usersList = $users->getUsers();
+        $usersList = $users->getUsersZone();
 
 
         $results = [
-            'list_of_users' => $usersList['results'],
-            'number_of_users' => $usersList['row_count']
+            'list_of_users' => $usersList,
+            // 'number_of_users' => $usersList['row_count']
         ];
 
         // rispondo al client:
