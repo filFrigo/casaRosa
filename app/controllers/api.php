@@ -252,4 +252,13 @@ class api
         header('Content-type: application/json');
         echo json_encode($result);
     }
+
+    public function getMovementTotal()
+    {
+        $wallet = new wallet($this->conn);
+        $result = $wallet->getMovementsTotal();
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode(['movement_total' => $result['results']['total']]);
+    }
 }

@@ -386,6 +386,39 @@ function loadMovements(e) {
         html = displayMovementRecord(movement);
         movementsContainer.insertAdjacentHTML("afterbegin", html);
       });
+
+      //TODO: crea il modal per la modifica
+      const btnEditUser = document.querySelectorAll(".--btnEditUser");
+      btnEditUser.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const data = btn.dataset;
+          //Recupera il modal
+          const editModal = document.getElementById("editMovement");
+          const editValue = document.getElementById("--valueEditMovement");
+          const datetimeEditMovement = document.getElementById(
+            "--datetimeEditMovement"
+          );
+          const wTypeContainer = document.getElementById(
+            "--categoryContainerEditMovements"
+          );
+          const btnExpese = document.getElementById("--btnEditMovement");
+
+          editValue.value = data.value;
+          datetimeEditMovement.value = data.datetime;
+          datetimeEditMovement.placeholder = data.datetime;
+          wTypeContainer.innerHTML =
+            data.wallet_type_id + " " + data.expesename;
+
+          btnExpese.classList.remove("btn-success");
+          btnExpese.classList.remove("btn-danger");
+          btnExpese.classList.add("btn-" + data.expesecolor);
+
+          btnExpese.innerHTML = data.expesedescription;
+
+          // console.log(btn);
+          // sovrascrivi i movimenti
+        });
+      });
     })
     .catch(function (error) {
       console.error(error);
@@ -395,30 +428,31 @@ function loadMovements(e) {
 // SHOW MOVEMENTS
 function displayMovementRecord(movement) {
   // console.log(movement);
-  const { datetime, id, name, negative, userid, value, wallet_type_id } =
+  const { datetime, id, name, negative, userid, value, walletTypeId } =
     movement;
 
   const expeseDescription = negative == 1 ? "spesa" : "entrata";
-  const color = negative == 1 ? "danger" : "success";
+  const expeseColor = negative == 1 ? "danger" : "success";
 
   const date = new Date(datetime);
+  const oDate = formatDate(date);
+  const oTime = formatTime(date);
+
+  const valueFixed = parseFloat(value / 100).toFixed(2);
 
   const html = `
                 <tr class="text-start">
                     <td>
                       <span data-date="${datetime}">  
-                        <span>${formatDate(date)}</span>
-                        <span class="d-none d-md-inline">${formatTime(
-                          date
-                        )}</span>
+                        <span>${oDate}</span>
+                        <span class="d-none d-md-inline">${oTime}</span>
                       </span>
                     </td>
                     <td>${name}</td>
-                    <td class="text-center"><div class="badge bg-${color}">${expeseDescription}</div></td>
-                    <td class="text-end">€${parseFloat(value / 100).toFixed(
-                      2
-                    )}</td>
-                    <td class="text-end"><button class="btn btn-link --btnEditUser" data-id="${id}"><i class="fa-solid fa-pencil text-secondary"></i></button></td>
+                    <td class="text-center"><div class="badge bg-${expeseColor}">${expeseDescription}</div></td>
+                    <td class="text-end">€${valueFixed}</td>
+                    <td class="text-end"><button class="btn btn-link --btnEditUser" data-id="${id}" data-datetime="${datetime}" data-date="${oDate}" data-time="${oTime}" data-value="${valueFixed}" data-expeseName="${name}" data-expeseDescription="${expeseDescription}" data-expeseColor="${expeseColor}" data-wallet_type_id="${walletTypeId}" data-bs-toggle="modal" 
+                        data-bs-target="#editMovement"><i class="fa-solid fa-pencil text-secondary"></i></button></td>
                 </tr>
                 `;
   return html;

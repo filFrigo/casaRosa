@@ -30,6 +30,7 @@ return [
       'api/getUsersZone' => 'controllers\api@getUsersZone',
 
       'api/getMovements' => 'controllers\api@getMovements',
+      'api/getMovementTotal' => 'controllers\api@getMovementTotal',
 
       'api/getTypeMovements' => 'controllers\api@getTypeMovements',
       'api/getTypeMovements/:typeMovements' => 'controllers\api@getTypeMovements',

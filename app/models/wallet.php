@@ -25,7 +25,7 @@ class wallet
 
         $sql = <<<'SQL'
                 SELECT `movements`.`id` 
-                ,`wallet type`.`id` as `wallet type id`
+                ,`wallet type`.`id` as `walletTypeId`
                 ,`movements`.`userid`
                 ,`movements`.`data` as `datetime`
                 ,`movements`.`value`
@@ -178,7 +178,7 @@ class wallet
 
 
         $sql = <<<'SQL'
-                INSERT INTO `movements` (`id`,`zoneid`, `data`, `wallet type id`, `value`, `userid`) 
+                INSERT INTO `movements` (`id`,`zoneid`, `data`, `wallet type id` , `value`, `userid`) 
                 VALUES (NULL, :zoneid, :date, :category, :value, :userid);
             SQL;
         // $return['sql_query'] = $sql;
@@ -205,6 +205,29 @@ class wallet
                 $return['last_id'] = $last_id;
                 $return['last_mov_data'] = $this->getMovements(['id' => $return['last_id']]);
             }
+        }
+
+        return $return;
+    }
+
+
+
+    // Somma dei movimenti
+    public function getMovementsTotal(array $params = [])
+    {
+        $session = getKeyInArray($_SESSION, 'userData', []);
+        $zoneid = getKeyInArray($session, 'zone_id', 0);
+
+        $sql = <<<'SQL'
+                SELECT sum(value) as `total` FROM `movements`
+                where `zoneid` = :zoneid;
+            SQL;
+        $stm = $this->conn->prepare($sql);
+        $stm->bindParam(':zoneid', $zoneid);
+        $stm->execute();
+
+        if ($stm) {
+            $return['results'] = $stm->fetch(\PDO::FETCH_ASSOC);
         }
 
         return $return;
