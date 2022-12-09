@@ -1,8 +1,10 @@
 // VARIABILI
 const usersContainer = document.getElementById("--usersContainer");
+const btnSaveUsers = document.getElementById("--btnSaveUsers");
 
 // EVENTI
 document.addEventListener("DOMContentLoaded", (e) => loadUsers(e));
+btnSaveUsers.addEventListener("click"), () => saveUser();
 
 // FUNZIONI
 function loadUsers(e) {

@@ -1,9 +1,12 @@
-SESSIONE:
-<pre>
-<?php
+<h3>Aree:</h3>
 
-var_dump($_SESSION);
+<div class="container">
+    <div class="d-flex" id='--areaContainer'>
+        <!-- qui sono presenti i dati dell'area -->
+    </div>
+</div>
 
 
-?>
-</pre>
+
+<script src="/js/custom/manage/api.js"></script>
+<script src="/js/custom/app/spaces.js"></script>
