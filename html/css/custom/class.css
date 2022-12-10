@@ -1,0 +1,21 @@
+/* STYLE FOR TRANSASITION SHOWING */
+.c-showing {
+  opacity: 1;
+  transition: opacity 0.6s linear;
+  display: block;
+}
+
+.c-prepare-show {
+  opacity: 0;
+  display: block;
+}
+
+.c-show {
+  opacity: 1;
+  display: block;
+}
+
+.c-hiding {
+  opacity: 0;
+  transition: opacity 0.6s linear;
+}

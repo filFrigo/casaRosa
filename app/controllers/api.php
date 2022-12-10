@@ -261,4 +261,23 @@ class api
         header('Content-type: application/json');
         echo json_encode(['movement_total' => $result['results']['total']]);
     }
+
+
+    public function storeUser()
+    {
+
+        $json = json_decode(file_get_contents('php://input'));
+
+        $result = [
+            'state' => false,
+            'message' => 'qualcosa è andato storto',
+            'data_stored' => $json
+        ];
+
+        // TODO: CR-5 Salva i dati sul db
+
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode($result);
+    }
 }

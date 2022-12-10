@@ -9,10 +9,12 @@
 
                 <div class="text-end w-100 px-3">
 
-                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createUsers" id="--btnCreateUsers">Nuovo</button>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createUsers"
+                        id="--btnCreateUsers">Nuovo</button>
                 </div>
 
-                <table class="mt-2 table table-borderless table-thead-bordered table-nowrap table-align-middle card-table dataTable no-footer p-0">
+                <table
+                    class="mt-2 table table-borderless table-thead-bordered table-nowrap table-align-middle card-table dataTable no-footer p-0">
 
                     <!-- Intestazione -->
                     <thead class=" table-secondary">
@@ -78,15 +80,17 @@
                     </div>
 
                     <!-- Questo è un messaggio in caso di errori -->
-                    <div class="my-3 me-4 alert d-none" id="--alertCreateMovement">Questo è un errore!
+                    <div class="my-3 me-4 alert alert-danger d-none" id="--alertModalNewUser">Questo è un errore!
                     </div>
 
 
                 </div>
                 <div class="modal-footer">
 
-                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal" id="--btnResetbtnCreateUsers"><i class="fa-solid fa-delete-left"></i> Reset</button>
-                    <button type="button" class="btn btn-primary" id="--btnSaveUsers"><i class="fa-solid fa-chevron-right"></i>
+                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal" id="--btnResetUsers"><i
+                            class="fa-solid fa-delete-left"></i> Reset</button>
+                    <button type="button" class="btn btn-primary" id="--btnSaveUsers"><i
+                            class="fa-solid fa-chevron-right"></i>
                         Inserisci</button>
                 </div>
             </div>

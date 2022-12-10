@@ -29,6 +29,7 @@ return [
       // 'api/getUsers' => 'controllers\api@getUsers',
       'api/getUsersZone' => 'controllers\api@getUsersZone',
 
+
       'api/getMovements' => 'controllers\api@getMovements',
       'api/getMovementTotal' => 'controllers\api@getMovementTotal',
 
@@ -38,7 +39,10 @@ return [
     ],
     'POST' => [
       'api/login' => 'controllers\api@login',
+
       'api/storeMovement' => 'controllers\api@storeMovement',
+
+      'api/storeUser' => 'controllers\api@storeUser',
 
     ]
   ],
