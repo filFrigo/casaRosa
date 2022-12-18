@@ -7,6 +7,7 @@ const newUserName = document.getElementById("--userName");
 const newUserSurname = document.getElementById("--userSurname");
 const newUserEmail = document.getElementById("--userEmail");
 const alertModalNewUser = document.getElementById("--alertModalNewUser");
+const modalCreateUsers = document.getElementById("createUsers");
 
 // EVENTI
 document.addEventListener("DOMContentLoaded", (e) => loadUsers(e));
@@ -34,6 +35,8 @@ function loadUsers(e) {
       users.forEach((user) => {
         // console.log(user);
         const { cognome, email, id, nome } = user;
+        displayUser(nome, cognome, email, id);
+        /*
         const html = `
             <tr>
                 <td>${nome}</td>
@@ -43,11 +46,24 @@ function loadUsers(e) {
             </tr>
             `;
         usersContainer.insertAdjacentHTML("beforebegin", html);
+        */
       });
     })
     .catch(function (error) {
       console.error(error);
     });
+}
+
+function displayUser(nome, cognome, email, id) {
+  const html = `
+            <tr>
+                <td>${nome}</td>
+                <td>${cognome}</td>
+                <td>${email}</td>
+                <td class="text-end"><button class="btn btn-link --btnEditUser" data-id="${id}"><i class="fa-solid fa-pencil text-secondary"></i></button></td>
+            </tr>
+            `;
+  usersContainer.insertAdjacentHTML("beforebegin", html);
 }
 
 async function saveUser(e) {
@@ -64,7 +80,7 @@ async function saveUser(e) {
   user.surname = surname;
   user.email = email;
 
-  // TODO: Salvo l'utente CR-5
+  // Salvo l'utente CR-5
   console.log(`salvataggio utente in corso...`, user);
   // disattivo il pulsante di salvataggio utente
   btnSaveUsers.classList.add("disabled");
@@ -77,11 +93,23 @@ async function saveUser(e) {
     alertModalNewUser.innerHTML = userStatement.message;
     // CR-5 avviso l'utente.
     showMessage(alertModalNewUser, 1000);
+    console.error(`Errore ${userStatement.message}`);
   }
 
+  // const modal = new bootstrap.Modal(modalCreateUsers);
+  //console.log(modalCreateUsers);
+  //modal.modal("hide");
+
   if (userStatement.state == true) {
-    // TODO: CR-5 → Chiudi il modal quando il salvataggio è avvenuto
-    // TODO: CR-5 → Aggiungi l'utente nell'elenco degli utenti.
+    // CR-5 → Chiudi il modal quando il salvataggio è avvenuto
+    $("#createUsers").modal("hide");
+    console.log(userStatement.new_user);
+    // CR-5 → Aggiungi l'utente nell'elenco degli utenti.
+    const newUser = userStatement.new_user;
+    displayUser(newUser.name, newUser.surname, newUser.email, newUser.id);
+    console.log(
+      `✔ Salvataggio di ${newUser.name} ${newUser.surname} effettuato con successo!`
+    );
   }
 }
 

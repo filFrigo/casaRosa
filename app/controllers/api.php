@@ -174,7 +174,25 @@ class api
     //     echo json_encode($results);
     // }
 
+    // Permette di recuperare gli utenti che sono nella zona ASSOCIATI
     public function getUsersZone()
+    {
+        // carico gli utenti
+        $users = new users($this->conn);
+        $usersList = $users->getUsersZone();
+
+
+        $results = [
+            'list_of_users' => $usersList,
+            // 'number_of_users' => $usersList['row_count']
+        ];
+
+        // rispondo al client:
+        header('Content-type: application/json');
+        echo json_encode($results);
+    }
+
+    public function getUsers()
     {
         // carico gli utenti
         $users = new users($this->conn);
@@ -265,19 +283,65 @@ class api
 
     public function storeUser()
     {
+        // rispondo al client:
+        header('Content-type: application/json');
 
         $json = json_decode(file_get_contents('php://input'));
+        $hasError= false;
+
+        $dataObject = $json->localData;
 
         $result = [
             'state' => false,
-            'message' => 'qualcosa è andato storto',
-            'data_stored' => $json
+            'message' => 'Errore generico',
+            'data_stored' => $json,
         ];
 
-        // TODO: CR-5 Salva i dati sul db
 
-        // rispondo al client:
-        header('Content-type: application/json');
+        // validare i dati ricevuti
+        $email = $dataObject->email;
+        $pattern = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i";
+        if (!preg_match($pattern, $email) || empty($email)) {
+           $result['message'] = 'email non valida';
+            $hasError = true;
+        }
+
+        $surname = $dataObject->surname;
+        if (!preg_match('/^[A-Za-z]*$/', $surname)|| empty($surname)) {
+            $result['message'] = 'cognome non valido';
+            $hasError = true;
+        }
+
+        $name = $dataObject->name;
+        if (!preg_match('/^[A-Za-z]*$/', $name) || empty($name)) {
+            $result['message'] = 'nome non valido';  
+            $hasError = true;    
+
+        }
+        
+        
+        // TODO: #CR-5 Salva i dati sul db ➡ Se sono riuscito
+              if (!$hasError) {
+                    $users = new users($this->conn);
+                    $user_istance = $users->storeUser(['user_name'=>$name,'user_surname'=>$surname,'user_email'=>$email ]);
+                    $user_id  = $user_istance['last_id'];  // ID dell'utente appena creato
+                    $result['new_user'] = [
+                        'name' => $name,
+                        'surname' => $surname,
+                        'email' => $email,
+                        'id' => $user_id,
+                    ];
+
+
+                    $zone_id =  $_SESSION["userData"]['zone_id'];
+                    $zone_istance = $users->allowZone(['user_id'=>$user_id,'zone_id'=>$zone_id]);
+                    
+                    $result['state'] = true;
+                    $result['message'] = '';
+              }
+            
+        
+
         echo json_encode($result);
     }
 }

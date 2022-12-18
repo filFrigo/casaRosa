@@ -6,7 +6,7 @@
     </div>
 </div>
 
-
+<pre><?php var_dump($_SESSION); ?></pre>
 
 <script src="/js/custom/manage/api.js"></script>
 <script src="/js/custom/app/spaces.js"></script>
