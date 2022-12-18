@@ -10,7 +10,7 @@ async function displayUsersArea() {
 
   areas.forEach((area) => {
     displayAreaContainer(areaContainer, area);
-    console.log(area);
+    //console.log(area);
   });
 }
 

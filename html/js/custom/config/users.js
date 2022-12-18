@@ -102,7 +102,7 @@ async function saveUser(e) {
 
   if (userStatement.state == true) {
     // CR-5 → Chiudi il modal quando il salvataggio è avvenuto
-    $("#createUsers").modal("hide");
+    // $("#createUsers").modal("hide");  // Chiudo il modal?
     console.log(userStatement.new_user);
     // CR-5 → Aggiungi l'utente nell'elenco degli utenti.
     const newUser = userStatement.new_user;
@@ -110,6 +110,10 @@ async function saveUser(e) {
     console.log(
       `✔ Salvataggio di ${newUser.name} ${newUser.surname} effettuato con successo!`
     );
+    // Resetto il modal
+    resetUser(e);
+    // Posso premere nuovamente il bottone
+    btnSaveUsers.classList.remove("disabled");
   }
 }
 

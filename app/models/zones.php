@@ -148,4 +148,50 @@ class zones
 
         return ['allowed' => $zonesAllowed, 'default' => $zones_default];
     }
+
+
+
+
+    public function getUserinArea($area) {
+        $session = getKeyInArray($_SESSION, 'userData', []);
+        $zoneid = getKeyInArray($session, 'zone_id', 0);
+
+        // TODO : CR-20 filtrare per area
+
+        $sql = <<<XML
+                SELECT
+                users.id
+                ,users.nome
+                ,users.cognome
+                ,users.email
+                ,zones.id as zoneid
+                ,zones.name as zonename
+
+                ,areas.id as areasid
+                ,areas.description
+
+                FROM `users`
+                join usersZone on users.id = usersZone.userid
+                join zones on usersZone.zoneid = zones.id
+
+                join usersArea on usersArea.userid = users.id
+
+                join areas on areas.zoneid = zones.id and usersArea.areaid = areas.id
+
+                where zones.id = :zoneid;
+                XML;
+        $return['sql_query'] = $sql;
+
+        $stm = $this->conn->prepare($sql);
+
+        $stm->bindParam(':zoneid', $zoneid);
+        $stm->execute();
+
+        if ($stm) {
+            $return['results'] = $stm->fetchAll(\PDO::FETCH_COLUMN);
+            $return['row_count'] =
+                $stm->rowCount();
+        }
+
+    }
 }

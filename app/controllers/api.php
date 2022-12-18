@@ -151,6 +151,34 @@ class api
             'list_of_areas' => $listOFAreas['results'],
             'number_of_areas' => $listOFAreas['row_count']
         ];
+        
+
+        
+        // TODO : CR_20 ➡ aggiungere gli utenti dell'area
+        
+        //$results['list_of_users'] = [];
+        foreach ($listOFAreas['results'] as $area) {
+            
+            // Recupero gli utenti nell'area
+            //$areas_istance = new areas($this->conn);
+            $usersOnArea = $zones->getUserinArea($area->id);
+
+
+            $results['list_of_areas_array'][$area->id] = [
+                'area_id' => $area->id,
+                'zone_id' => $area->zoneid,
+                'description' => $area->description,
+                'civic' => $area->civic,
+                'users' => $usersOnArea,
+            ];
+
+            // TODO: SONO QUIII CR-20
+            var_dump($usersOnArea);
+            //$results['usersOnArea'][$temp_area->id] = $usersOnArea;
+        }
+
+
+
 
         // rispondo al client:
         header('Content-type: application/json');
@@ -254,7 +282,7 @@ class api
             'data_stored' => $json
         ];
 
-        // TODO: salva i dati sul database
+        // salva i dati sul database
         $wallet = new wallet($this->conn);
         $istance = $wallet->storeMovement($json);
 
@@ -303,7 +331,7 @@ class api
         $pattern = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i";
         if (!preg_match($pattern, $email) || empty($email)) {
            $result['message'] = 'email non valida';
-            $hasError = true;
+           // $hasError = true; // ❌ Tolgo la verifica della email
         }
 
         $surname = $dataObject->surname;
@@ -320,7 +348,7 @@ class api
         }
         
         
-        // TODO: #CR-5 Salva i dati sul db ➡ Se sono riuscito
+        // #CR-5 Salva i dati sul db ➡ Se sono riuscito
               if (!$hasError) {
                     $users = new users($this->conn);
                     $user_istance = $users->storeUser(['user_name'=>$name,'user_surname'=>$surname,'user_email'=>$email ]);

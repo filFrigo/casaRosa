@@ -13,6 +13,8 @@ async function loadAreas(params) {
       return response.json();
     })
     .then((data) => {
+      console.log(data.list_of_areas_array);
+
       return data.list_of_areas;
     })
     .catch(function (error) {
