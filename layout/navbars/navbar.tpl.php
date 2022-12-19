@@ -18,14 +18,15 @@ $brand = getKeyInArray($data['appParams'], 'brandName', '')
             <!-- <li class="nav-item"><a href="/dashboard" class="nav-link" aria-current="page">Dashboard</a></li> -->
 
             <!-- configurazioni -->
-            <div>
+            <div class="me-2">
                 <button class="nav-link btn btn-link" data-bs-toggle="offcanvas" data-bs-target="#configMenu">
                     <i class="fa-solid fa-gear h4 link-dark"></i>
             </div>
 
             <!-- cambio istanza -->
             <div>
-                <button class="btn btn-link link-dark text-decoration-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#leftMenu" aria-controls="offcanvasExample" id="--btnAreas">
+                <button class="btn btn-link link-dark text-decoration-none" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#leftMenu" aria-controls="offcanvasExample" id="--btnAreas">
                     <div class="d-flex flex-row align-items-center ">
 
                         <div class="d-flex align-items-center me-2">
@@ -44,20 +45,20 @@ $brand = getKeyInArray($data['appParams'], 'brandName', '')
             </div>
 
             <!-- licenza -->
-            <div>
+            <div class="mx-1 d-none">
                 <button class="nav-link btn btn-link">
                     <i class="fa-regular fa-id-badge h4 link-dark"></i>
                 </button>
             </div>
 
             <!-- supporto -->
-            <div>
+            <div class="mx-1 d-none">
                 <button class="nav-link btn btn-link">
                     <i class="fa-solid fa-headset h4 link-dark"></i> </button>
             </div>
 
             <!-- news -->
-            <div>
+            <div class="mx-1 d-none">
                 <button class="nav-link btn btn-link">
                     <i class="fa-regular fa-newspaper h4 link-dark"></i>
             </div>
@@ -90,7 +91,8 @@ $brand = getKeyInArray($data['appParams'], 'brandName', '')
                         <i class=" h6 fa-solid fa-magnifying-glass"></i>
 
                     </div>
-                    <input class="form-control  border-0" placeholder="cerca struttura.." type="search" id="--searchAreas">
+                    <input class="form-control  border-0" placeholder="cerca struttura.." type="search"
+                        id="--searchAreas">
                 </div>
             </div>
         </div>
@@ -127,7 +129,8 @@ $brand = getKeyInArray($data['appParams'], 'brandName', '')
                     Impostazioni Zona</a>
             </div>
             <div>
-                <a href="/config/areas" class="btn btn-link text-decoration-none"><i class="fa-solid fa-people-roof"></i>
+                <a href="/config/areas" class="btn btn-link text-decoration-none"><i
+                        class="fa-solid fa-people-roof"></i>
                     Suddivisione Aree</a>
             </div>
 

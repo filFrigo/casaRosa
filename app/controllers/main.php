@@ -136,4 +136,19 @@ class main
     include
       __DIR__ . '/../../layout/empty.tpl.php';
   }
+
+    public function displayTalks()
+  {
+    $data = $this->data;
+
+    $this->createNavbar($data);
+    $this->createSidebar($data);
+
+    // Carica il contenuto della pagina
+    $this->content = view('user/talks', compact('data'));
+
+    // carica il layout della pagina
+    include
+      __DIR__ . '/../../layout/empty.tpl.php';
+  }
 }

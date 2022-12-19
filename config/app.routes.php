@@ -9,6 +9,7 @@ return [
       'controllers\main@displayHome',
       'login' => 'controllers\main@displayLogin',
       'dashboard' => 'controllers\main@displayHome',
+      'talks' => 'controllers\main@displayTalks',
 
       'wallet' => 'controllers\main@displayWallet',
       'spaces' => 'controllers\main@displaySpaces',

@@ -19,6 +19,13 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="btn btn-link link-light" href="/talks">
+                <i class="fa-solid fa-message"></i>
+            </a>
+        </li>
+
+
 
     </ul>
 

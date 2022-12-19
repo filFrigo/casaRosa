@@ -85,13 +85,17 @@
 
 
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer d-flex">
+                    <div class="flex-grow-1">
+                        <button type="button" class="btn btn-link link-danger text-decoration-none" data-dismiss="modal"
+                            id="--btnReset"><i class="fa-solid fa-delete-left link-danger "></i> Reset</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary" id="--btnSaveUsers"><i
+                                class="fa-solid fa-chevron-right"></i>
+                            Inserisci</button>
+                    </div>
 
-                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal" id="--btnResetUsers"><i
-                            class="fa-solid fa-delete-left"></i> Reset</button>
-                    <button type="button" class="btn btn-primary" id="--btnSaveUsers"><i
-                            class="fa-solid fa-chevron-right"></i>
-                        Inserisci</button>
                 </div>
             </div>
         </div>
