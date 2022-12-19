@@ -155,7 +155,7 @@ class api
             'number_of_areas' => $listOFAreas['row_count'],
             'report_expese_mov' => $expese['results'],
             'report_expese_tot' => $expese['sum'],
-            'expese_area' => $expese['sum'] / $listOFAreas['row_count']
+            'expese_area' => $expese['sum'] / $listOFAreas['row_count'],
         ];
         
 
@@ -169,13 +169,20 @@ class api
             //$areas_istance = new areas($this->conn);
             $usersOnArea = $zones->getUserinArea($area->id);
 
+            // Recupera le entrate dell'area
+            $areaEntrance = $wallet->getMovements(['income'=>true,'area'=>$area->id]);
 
+            $income = 0 + $areaEntrance['sum'];
+            
             $results['list_of_areas'][$area->id] = [
                 'area_id' => $area->id,
                 'zone_id' => $area->zoneid,
                 'description' => $area->description,
                 'civic' => $area->civic,
                 'users' => $usersOnArea['results'],
+                'expese' => $expese['sum'] / $listOFAreas['row_count'],
+                'income' => $income,
+                'balance' => $income + ($expese['sum'] / $listOFAreas['row_count']),
             ];
 
         }
@@ -288,6 +295,8 @@ class api
         // salva i dati sul database
         $wallet = new wallet($this->conn);
         $istance = $wallet->storeMovement($json);
+
+        $result['debug_data_passed'] = $istance['data_passed'];
 
         if (!$istance['last_id']) {
             $result['message'] = 'Inserimento non valido';

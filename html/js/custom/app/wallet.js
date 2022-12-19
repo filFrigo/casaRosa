@@ -14,6 +14,13 @@ const btnResetNewCategory = document.getElementById("--btnResetNewMovement");
 const btnSaveMovement = document.getElementById("--btnSaveMovement");
 const btnContinueMovement = document.getElementById("--btnContinueMovement");
 
+const modal_displayArea_title = document.getElementById(
+  "--areaContainerNewMovements_title"
+);
+const modal_displayArea_container = document.getElementById(
+  "--areaContainerNewMovements_container"
+);
+
 // MODALS
 const modalcreateMovement = document.getElementById("createMovement");
 
@@ -57,10 +64,21 @@ function setTypeMovement(e) {
     case "expense":
     default:
       btnExpenseCreateMovement.classList.add("active");
+      //Nascondo le aree
+      modal_displayArea_title.classList.add("d-none");
+      modal_displayArea_container.classList.add("d-none");
+
       break;
 
     case "entrance":
       btnEntranceCreateMovement.classList.add("active");
+      // Visualizzo le aree
+      modal_displayArea_title.classList.remove("d-none");
+      modal_displayArea_container.classList.remove("d-none");
+
+      // TODO: visualizzo/ricarico le aree
+      displayModalArea();
+
       break;
   }
 
@@ -173,6 +191,7 @@ function resetNewCategory(e) {
   inputDatetimeCreateMovement.value = "";
   inputValueCreateMovement.value = "";
   deselectCategory();
+  deselectArea();
   hideMessage(alertCreateMovement);
 }
 
@@ -283,7 +302,18 @@ function getLocalNewMovementData() {
       : "";
   });
 
-  // console.log("object new movement", newMovement);
+  // Recupero l'area:
+  newMovement.area = "";
+  const currentArea = document.querySelectorAll(
+    '[data-element="areaNewMovement"]'
+  );
+  currentArea.forEach((area) => {
+    area.classList.contains("active")
+      ? (newMovement.area = area.dataset.area_id)
+      : "";
+  });
+
+  console.log("object new movement", newMovement);
   return newMovement;
 }
 
@@ -340,7 +370,10 @@ function verifyData(localData) {
 
     return state;
   }
-  // TODO: Verifico se la categoria esiste.
+  // TOFIX: Verifico se la categoria esiste.
+
+  // TOFIX: Verifico se ho selezionato l'area?
+  // VErifico se l'area Esiste
 
   state = true;
   return state;
@@ -456,4 +489,77 @@ function displayMovementRecord(movement) {
                 </tr>
                 `;
   return html;
+}
+
+async function loadAreas() {
+  const res = await fetch("/api/areas", {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "GET",
+    //body: JSON.stringify({ localData }),
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      // Gestisci i ritorni dei messaggi
+      return data;
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+
+  return res;
+}
+
+async function displayModalArea() {
+  const data = await loadAreas();
+  //console.log(data.list_of_areas);
+
+  modal_displayArea_container.innerHTML = "";
+
+  Object.values(data.list_of_areas).forEach((area) => {
+    const html = `<button class="btn btn-link text-decoration-none --bntNewMovementAreas" >
+                            <div class="input-group">
+                                <div class="btn btn-outline-success" data-area_id="${area.area_id}" id="area-${area.area_id}"  data-element="areaNewMovement">${area.description}</div>
+                                <div class="btn btn-success" data-area_id="${area.area_id}"><i class="fa-solid fa-house text-white"></i></div>
+                            </div>
+                        </button>`;
+    modal_displayArea_container.insertAdjacentHTML("afterbegin", html);
+  });
+
+  // TODO: abilitare la pressione del pulsante;
+  const btnAreas = document.getElementsByClassName("--bntNewMovementAreas");
+  for (let element = 0; element < btnAreas.length; element++) {
+    const area = btnAreas[element];
+
+    //  aggiungi l'evento al click del bottone per selezionare
+    area.addEventListener("click", (e) => {
+      // Abilitae
+      selectArea(e);
+    });
+  }
+  //console.log(btnAreas);
+
+  const eventClick = document.addEventListener("click", (e) => {});
+}
+
+function selectArea(event) {
+  const currentArea = event.target.dataset;
+  console.log(currentArea);
+
+  const target = document.getElementById("area-" + currentArea.area_id);
+  deselectArea();
+  target.classList.add("active");
+}
+
+function deselectArea() {
+  const previusSelection = document.querySelectorAll(
+    '[data-element="areaNewMovement"]'
+  );
+  previusSelection.forEach((ele) => {
+    ele.classList.contains("active") ? ele.classList.remove("active") : "";
+  });
 }

@@ -23,12 +23,16 @@ class wallet
         $session = getKeyInArray($_SESSION, 'userData', []);
         $zoneid = getKeyInArray($session, 'zone_id', 0);
 
+        ///////////////////////////////////////////////////////////
+        // PARAMS
         $onlyExpense = getKeyInArray($params, 'expense', false);
+        $onlyIncome = getKeyInArray($params, 'income', false);
+        $areaid = getKeyInArray($params, 'area', NULL);
 
         $sql = <<<'SQL'
                 SELECT `movements`.`id` 
                 ,`wallet type`.`id` as `walletTypeId`
-                ,`movements`.`userid`
+                ,`movements`.`areaid`
                 ,`movements`.`data` as `datetime`
                 ,`movements`.`value`
                 ,`wallet type`.`name`
@@ -43,6 +47,12 @@ class wallet
         if ($onlyExpense) {
             $sql .= ' AND `wallet type`.`negative` = 1 ';
         }
+        if ($onlyIncome) {
+            $sql .= ' AND `wallet type`.`negative` = 0 ';
+        }
+        if ($areaid) {
+            $sql .= ' AND `movements`.`areaid` = :areaid ';
+        }
         $sql .= ' order by `movements`.`data` desc';
 
         // $return['sql_query'] = $sql;
@@ -50,7 +60,9 @@ class wallet
         $stm = $this->conn->prepare($sql);
 
         $stm->bindParam(':zoneid', $zoneid);
-
+        if ($areaid) {
+            $stm->bindParam(':areaid', $areaid);
+        }
         if ($id > 0) {
             $stm->bindParam(':id', $id);
             // $stm->execute(['id' => $id]);
@@ -138,13 +150,25 @@ class wallet
         // REcupero la sessione
         $session = getKeyInArray($_SESSION, 'userData', []);
         $zoneid = getKeyInArray($session, 'zone_id', 0);
+        
 
         $return['error'] = '';
         $data = $json->localData;
-        // $return['data_passed'] = $data;
+        
+        $return['data_passed']['data'] = $data;
+
+
 
         $date = $data->data; //'2022-11-05 15:37:39.000000'
-        // TODO: VERIFICA DELLA DATA
+        $areaid = 0;
+        $areaid += (int) $data->area; // id of area
+
+        $return['data_passed']['pre'] = $areaid;
+
+        $areaid = $areaid == 0 || $areaid == '' ? NULL : $areaid;
+        $return['data_passed']['end_debug'] = $areaid;
+        
+        // TOFIX: VERIFICA DELLA DATA
 
         // VERIFICA DELL'IMPORTO
         $temp_value =  $data->value;
@@ -178,21 +202,23 @@ class wallet
 
             // Se la categoria è negativa, trasformo il numero in negativo
             $is_negative ? $value = ((int)$value) * -1 : '';
+
+            // Se la categoria è negativa, imposto l'area null:
+           
+           $is_negative ? $areaid = NULL :'';
         } else {
             // Se non trovo dati sulla query genero un errore.
             $return['error'] = 'Categoria Inesistente';
             return $return;
         }
 
-        // FIXME: recupera l'userid dalla sessione
-        $userid = 1;
-
+        //$areaid  =1;
 
         $sql = <<<'SQL'
-                INSERT INTO `movements` (`id`,`zoneid`, `data`, `wallet type id` , `value`, `userid`) 
-                VALUES (NULL, :zoneid, :date, :category, :value, :userid);
+                INSERT INTO `movements` (`id`,`zoneid`, `data`, `wallet type id` , `value`, `areaid`) 
+                VALUES (NULL, :zoneid, :date, :category, :value, :areaid)
             SQL;
-        // $return['sql_query'] = $sql;
+        $return['data_passed']['sql_query'] = $sql;
 
         $stm = $this->conn->prepare($sql);
 
@@ -200,7 +226,7 @@ class wallet
         $stm->bindParam(':date', $date);
         $stm->bindParam(':category', $category);
         $stm->bindParam(':value', $value);
-        $stm->bindParam(':userid', $userid);
+        $stm->bindParam(':areaid', $areaid);  // Posso passare come valore NULL
 
         $stm->execute();
 

@@ -18,12 +18,25 @@ async function displayUsersArea() {
 }
 
 function displayAreaContainer(container, data, expese) {
+  const balance = parseInt(data.balance / 100);
+  let displayValue = "";
+
+  if (balance == 0) {
+    displayValue = `<span class="text-danger"><i class="fa-solid fa-check text-success"></i></span>`;
+  }
+
+  if (balance < 0) {
+    displayValue = `<span class="text-danger">${balance} €</span>`;
+  }
+
+  if (balance > 0) {
+    displayValue = `<span class="text-success">${balance} €</span>`;
+  }
+
   let html = `
     <div class="card m-1 mb-3 mx-2" style="width: 18rem;">
-      <div class="card-header d-flex" ><span class="flex-grow-1">${
-        data.description
-      }</span>
-      <span>${0}/${expese / 100} €</span></div>
+      <div class="card-header d-flex" ><span class="flex-grow-1">${data.description}</span>
+      ${displayValue}</div>
       <ul class="list-unstyled list-group">`;
   // console.log(data);
   Object.values(data.users).forEach((user) => {

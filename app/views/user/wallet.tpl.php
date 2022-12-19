@@ -6,11 +6,13 @@
 
                 <div class="text-end w-100 px-3">
 
-                    <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#createMovement" id="--btnCreateMovement">Nuovo movimento</button>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                        data-bs-target="#createMovement" id="--btnCreateMovement">Nuovo movimento</button>
                 </div>
 
                 <div class="table-responsive">
-                    <table class="mt-2 table table-borderless table-thead-bordered table-nowrap table-align-middle card-table dataTable no-footer p-0">
+                    <table
+                        class="mt-2 table table-borderless table-thead-bordered table-nowrap table-align-middle card-table dataTable no-footer p-0">
                         <thead class=" table-secondary">
                             <tr>
                                 <th class="col-auto">Data</th>
@@ -37,7 +39,8 @@
 <!-- modals della pagina -->
 <div>
     <!-- modal nuovo movimento -->
-    <div class="modal fade" id="createMovement" tabindex="-1" role="dialog" aria-labelledby="createMovementLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade" id="createMovement" tabindex="-1" role="dialog" aria-labelledby="createMovementLabel"
+        aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -49,8 +52,10 @@
 
                     <div class="mx-3">
                         <div class="input-group text-center row">
-                            <button type="button" class="btn btn-outline-danger col " id="--btnExpenseCreateMovement" data-type="expense">Spesa</button>
-                            <button type="button" class="btn btn-outline-success col" id="--btnEntranceCreateMovement" data-type="entrance">Entrata</button>
+                            <button type="button" class="btn btn-outline-danger col " id="--btnExpenseCreateMovement"
+                                data-type="expense">Spesa</button>
+                            <button type="button" class="btn btn-outline-success col" id="--btnEntranceCreateMovement"
+                                data-type="entrance">Entrata</button>
                         </div>
                     </div>
 
@@ -59,7 +64,8 @@
                         <div class="col-sm-10">
                             <div class="input-group ">
                                 <button class="btn btn-outline-secondary" id="--setToday">oggi</button>
-                                <input type="datetime-local" class="form-control" placeholder="" id="--datetimeCreateMovement">
+                                <input type="datetime-local" class="form-control" placeholder=""
+                                    id="--datetimeCreateMovement">
                             </div>
                         </div>
                     </div>
@@ -76,12 +82,44 @@
                             <label class="col-form-label">Categoria</label>
                         </div>
                         <div class="col text-end me-3">
-                            <button class="btn btn-link link-secondary text-decoration-none disabled" id="--btnNewCategory"><i class="fa-solid fa-plus"></i>
+                            <button class="btn btn-link link-secondary text-decoration-none disabled"
+                                id="--btnNewCategory"><i class="fa-solid fa-plus"></i>
                                 Nuova
                                 Categoria</button>
                         </div>
                     </div>
                     <div class="border rounded me-4 p-3" id="--categoryContainerNewMovements" tabindex="0">
+
+
+                        <button class="btn btn-link text-decoration-none">
+                            <div class="input-group">
+                                <div class="btn btn-outline-secondary">categoria</div>
+                                <div class="btn btn-secondary">gruppo</div>
+                            </div>
+                        </button>
+
+                        <button class="btn btn-link text-decoration-none">
+                            <div class="input-group">
+                                <div class="btn btn-outline-secondary">categoria</div>
+                                <div class="btn btn-secondary">gruppo</div>
+                            </div>
+                        </button>
+
+                    </div>
+
+                    <div class="row d-none" id="--areaContainerNewMovements_title">
+                        <div class="col">
+                            <label class="col-form-label">Associa ad Area</label>
+                        </div>
+                        <div class="col text-end me-3">
+                            <a class="btn btn-link link-secondary text-decoration-none" href="/config/areas"
+                                id="--btnNewCategory"><i class="fa-solid fa-plus"></i>
+                                Nuova
+                                Area</a>
+                        </div>
+                    </div>
+                    <div class="border rounded me-4 p-3  d-none" id="--areaContainerNewMovements_container"
+                        tabindex="0">
 
 
                         <button class="btn btn-link text-decoration-none">
@@ -106,12 +144,20 @@
 
 
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-warning" data-dismiss="modal" id="--btnResetNewMovement"><i class="fa-solid fa-delete-left"></i> Reset</button>
-                    <button type="button" class="btn btn-primary" id="--btnSaveMovement"><i class="fa-solid fa-chevron-right"></i>
-                        Inserisci</button>
-                    <button type="button" class="btn btn-primary" id="--btnContinueMovement"><i class="fa-solid fa-angles-right"></i>
-                        Inserisci e continua</button>
+                <div class="modal-footer d-flex">
+                    <div class="flex-grow-1">
+                        <button type="button" class="btn btn-link link-danger text-decoration-none" data-dismiss="modal"
+                            id="--btnResetNewMovement"><i class="fa-solid fa-delete-left"></i>
+                            Reset</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-outline-primary" id="--btnSaveMovement"><i
+                                class="fa-solid fa-chevron-right"></i>
+                            Inserisci e chiudi</button>
+                        <button type="button" class="btn btn-primary" id="--btnContinueMovement"><i
+                                class="fa-solid fa-angles-right"></i>
+                            continua</button>
+                    </div>
 
                 </div>
             </div>
@@ -121,7 +167,8 @@
 
 
     <!-- MODAL MODIFICA -->
-    <div class="modal fade" id="editMovement" tabindex="-1" role="dialog" aria-labelledby="editMovementLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade" id="editMovement" tabindex="-1" role="dialog" aria-labelledby="editMovementLabel"
+        aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -141,7 +188,8 @@
                         <label for="--datetimeEditMovement" class="col-sm-2 col-form-label">Data</label>
                         <div class="col-sm-10">
                             <div class="input-group ">
-                                <input type="datetime-local" class="form-control" placeholder="" id="--datetimeEditMovement">
+                                <input type="datetime-local" class="form-control" placeholder=""
+                                    id="--datetimeEditMovement">
                             </div>
                         </div>
                     </div>
@@ -170,8 +218,10 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal" id="--btnDeleteMovement"><i class="fa-solid fa-trash-can"></i> Elimina</button>
-                    <button type="button" class="btn btn-primary" id="--btnSaveMovement"><i class="fa-regular fa-floppy-disk"></i>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal"
+                        id="--btnDeleteMovement"><i class="fa-solid fa-trash-can"></i> Elimina</button>
+                    <button type="button" class="btn btn-primary" id="--btnSaveMovement"><i
+                            class="fa-regular fa-floppy-disk"></i>
                         Salva</button>
                 </div>
             </div>
