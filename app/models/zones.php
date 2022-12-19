@@ -152,9 +152,13 @@ class zones
 
 
 
-    public function getUserinArea($area) {
+    public function getUserinArea($areaid) {
         $session = getKeyInArray($_SESSION, 'userData', []);
         $zoneid = getKeyInArray($session, 'zone_id', 0);
+
+        $areaid = (int) $areaid;
+
+        $return['zoneid'] = $zoneid; 
 
         // TODO : CR-20 filtrare per area
 
@@ -178,20 +182,25 @@ class zones
 
                 join areas on areas.zoneid = zones.id and usersArea.areaid = areas.id
 
-                where zones.id = :zoneid;
+                where zones.id = :zoneid
+                and areas.id = :areaid
                 XML;
         $return['sql_query'] = $sql;
 
         $stm = $this->conn->prepare($sql);
 
         $stm->bindParam(':zoneid', $zoneid);
+         $stm->bindParam(':areaid', $areaid);
         $stm->execute();
 
         if ($stm) {
-            $return['results'] = $stm->fetchAll(\PDO::FETCH_COLUMN);
+            $return['results'] = $stm->fetchAll(\PDO::FETCH_OBJ);
             $return['row_count'] =
                 $stm->rowCount();
         }
+        $return['PDO_errors'] = $this->conn->errorInfo();
+
+        return $return;
 
     }
 }

@@ -147,14 +147,20 @@ class api
         $listOFAreas = $zones->getAreas();
 
 
+        $wallet = new wallet($this->conn);
+        $expese = $wallet->getMovements(['expense'=>true]);
+
         $results = [
-            'list_of_areas' => $listOFAreas['results'],
-            'number_of_areas' => $listOFAreas['row_count']
+            //'list_of_areas_old' => $listOFAreas['results'],
+            'number_of_areas' => $listOFAreas['row_count'],
+            'report_expese_mov' => $expese['results'],
+            'report_expese_tot' => $expese['sum'],
+            'expese_area' => $expese['sum'] / $listOFAreas['row_count']
         ];
         
 
         
-        // TODO : CR_20 ➡ aggiungere gli utenti dell'area
+        // CR_20 ➡ aggiungere gli utenti dell'area
         
         //$results['list_of_users'] = [];
         foreach ($listOFAreas['results'] as $area) {
@@ -164,17 +170,14 @@ class api
             $usersOnArea = $zones->getUserinArea($area->id);
 
 
-            $results['list_of_areas_array'][$area->id] = [
+            $results['list_of_areas'][$area->id] = [
                 'area_id' => $area->id,
                 'zone_id' => $area->zoneid,
                 'description' => $area->description,
                 'civic' => $area->civic,
-                'users' => $usersOnArea,
+                'users' => $usersOnArea['results'],
             ];
 
-            // TODO: SONO QUIII CR-20
-            var_dump($usersOnArea);
-            //$results['usersOnArea'][$temp_area->id] = $usersOnArea;
         }
 
 

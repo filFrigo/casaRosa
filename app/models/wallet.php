@@ -23,6 +23,8 @@ class wallet
         $session = getKeyInArray($_SESSION, 'userData', []);
         $zoneid = getKeyInArray($session, 'zone_id', 0);
 
+        $onlyExpense = getKeyInArray($params, 'expense', false);
+
         $sql = <<<'SQL'
                 SELECT `movements`.`id` 
                 ,`wallet type`.`id` as `walletTypeId`
@@ -37,6 +39,9 @@ class wallet
             SQL;
         if ($id > 0) {
             $sql .= ' AND `movements`.`id` = :id ';
+        }
+        if ($onlyExpense) {
+            $sql .= ' AND `wallet type`.`negative` = 1 ';
         }
         $sql .= ' order by `movements`.`data` desc';
 
@@ -57,6 +62,12 @@ class wallet
             $return['row_count'] =
                 $stm->rowCount();
         }
+
+        $return['sum'] = 0;
+        foreach ($return['results'] as $value) {
+            $return['sum'] = $return['sum'] + $value->value;
+        }
+
 
         return $return;
     }
