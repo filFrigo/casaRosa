@@ -10,7 +10,9 @@ async function displayUsersArea() {
   const areaExpeseSum = document.getElementById("--textExpeseSum");
 
   console.log(areas);
-  areaExpeseSum.innerHTML = `${areas.report_expese_tot / 100} €`;
+  areaExpeseSum.innerHTML = `Ripartizione ${
+    (areas.report_expese_tot / 100) * -1
+  } €`;
 
   Object.values(areas.list_of_areas).forEach((area) => {
     displayAreaContainer(areaContainer, area, areas.expese_area);

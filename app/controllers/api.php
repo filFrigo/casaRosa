@@ -311,13 +311,25 @@ class api
         echo json_encode($result);
     }
 
-    public function getMovementTotal()
+    public function getDashboardReports()
     {
         $wallet = new wallet($this->conn);
-        $result = $wallet->getMovementsTotal();
+        $balance = $wallet->getMovementsTotal();
+        
+        $expese = $wallet->getMovements(['expense'=>true]);
+
+        $zones = new zones($this->conn);
+        $listOFAreas = $zones->getAreas();
+        
+        $results = [
+            'balance' => $balance['results']['total']/100,
+            'expese' => $expese['sum']/100,
+            'areas' => $listOFAreas['row_count'],
+        ];
+
         // rispondo al client:
         header('Content-type: application/json');
-        echo json_encode(['movement_total' => $result['results']['total']]);
+        echo json_encode($results);
     }
 
 

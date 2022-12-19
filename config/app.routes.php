@@ -31,7 +31,7 @@ return [
 
 
       'api/getMovements' => 'controllers\api@getMovements',
-      'api/getMovementTotal' => 'controllers\api@getMovementTotal',
+      'api/getDashboardReports' => 'controllers\api@getDashboardReports',
 
       'api/getTypeMovements' => 'controllers\api@getTypeMovements',
       'api/getTypeMovements/:typeMovements' => 'controllers\api@getTypeMovements',

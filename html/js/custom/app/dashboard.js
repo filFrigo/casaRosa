@@ -1,13 +1,15 @@
 // VARIABILES
 const divCurrentBalance = document.getElementById("--currentBalance");
+const divCurrentExpese = document.getElementById("--currentExpese");
+const divCurrentAreas = document.getElementById("--currentAreas");
 
 // EVENTS
-document.addEventListener("DOMContentLoaded", getMovementBalance());
+document.addEventListener("DOMContentLoaded", getDashboardReports());
 
 // FUNCTIONS
-function getMovementBalance() {
+function getDashboardReports() {
   //totale dei movimenti
-  fetch("/api/getMovementTotal/", {
+  fetch("/api/getDashboardReports", {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -19,8 +21,9 @@ function getMovementBalance() {
     })
     .then((data) => {
       console.log(data);
-      divCurrentBalance.innerHTML =
-        parseFloat(data.movement_total / 100).toFixed(2) + " €";
+      divCurrentBalance.innerHTML = parseFloat(data.balance).toFixed(2) + " €";
+      divCurrentExpese.innerHTML = parseFloat(data.expese).toFixed(2) + " €";
+      divCurrentAreas.innerHTML = parseFloat(data.areas);
     })
     .catch(function (error) {
       console.error(error);
